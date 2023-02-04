@@ -1,21 +1,15 @@
 package hau_trieu.chat;
 
-import java.util.List;
 
-public class Group {
+public interface Group {
 	
-	private List<User> members;
+	void createGroup();
 	
-	public Group(){
-		
-	}
+	void addMembers();
 
-	public List<User> getMembers() {
-		return members;
-	}
-
-	public void setMembers(List<User> members) {
-		this.members = members;
-	}
+	void getMembers();
 	
+	void removeMembers();
+	
+	void removeGroups();
 }
