@@ -27,10 +27,4 @@ public class UserRepositoryImpl implements UserRepository {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public void selfDestruct(User user) {
-		System.out.println("selfDestruct");
-		
-	}
-
 }
