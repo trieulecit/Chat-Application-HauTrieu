@@ -1,6 +1,6 @@
-package hau_trieu.chat;
+package com.hau_trieu.chat.domains;
 
-public class AudioFile implements File{
+public class VideoFile implements File{
 
 	@Override
 	public void upload() {

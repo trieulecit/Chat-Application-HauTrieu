@@ -1,6 +1,6 @@
-package hau_trieu.chat;
+package com.hau_trieu.chat.domains;
 
-public class ImageFile implements File{
+public class AudioFile implements File{
 
 	@Override
 	public void upload() {
@@ -19,5 +19,5 @@ public class ImageFile implements File{
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 }

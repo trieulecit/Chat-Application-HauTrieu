@@ -1,6 +1,6 @@
-package hau_trieu.chat.infrastructure.data;
+package com.hau_trieu.chat.infrastructure;
 
-import hau_trieu.chat.User;
+import com.hau_trieu.chat.domains.User;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -9,9 +9,8 @@ public class UserRepositoryImpl implements UserRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 	@Override
-	public void add(User user) {
+	public void create(User user) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -27,4 +26,6 @@ public class UserRepositoryImpl implements UserRepository {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 }

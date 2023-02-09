@@ -1,4 +1,4 @@
-package hau_trieu.chat;
+package com.hau_trieu.chat.domains;
 
 public class User {
 	private String lastName;
