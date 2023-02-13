@@ -1,10 +1,15 @@
 package com.hau_trieu.chat.domains;
 
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Base64;
+import java.util.Calendar;
 
 public class User {
 	private int id;
+	private String username;
 	private String lastName;
 	private String firstName;
 	private String fullName;
@@ -12,6 +17,10 @@ public class User {
 	private String gender;
 	private String dateOfBirth;
 
+	public User(){
+		
+	}
+	
 	public User(String lastName, String firstName, String hashPassword, String gender, String dob) {
 		super();
 		this.lastName = lastName;
@@ -22,9 +31,6 @@ public class User {
 		this.dateOfBirth = dob;
 	}
 
-	public User() {
-
-	}
 	public int getId() {
 		return id;
 	}
@@ -32,7 +38,7 @@ public class User {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public String getLastName() {
 		return lastName;
 	}
@@ -50,7 +56,7 @@ public class User {
 	}
 
 	public String getFullName() {
-		return fullName;
+		return this.firstName + this.lastName;
 	}
 
 	public String getHashPassword() {
@@ -58,7 +64,7 @@ public class User {
 	}
 
 	public void setHashPassword(String password) {
-		this.hashPassword = hashPassword(password);
+		this.hashPassword = passwordHash(password);
 	}
 
 	public String getGender() {
@@ -73,12 +79,17 @@ public class User {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setDateOfBirth() {
+		
+		Date date = Calendar.getInstance().getTime();  
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+		String dateString = dateFormat.format(date);  
+
+		
+		this.dateOfBirth = dateString;
 	}
 
-//	password hashing, String in, hashed password out
-	public String hashPassword(String password) {
+	public String passwordHash(String password) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(password.getBytes("UTF-8"));
@@ -88,6 +99,17 @@ public class User {
 		}
 	}
 
+	public String getUsername() {
+		return username;
+	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.firstName;
+	}
 
 }
