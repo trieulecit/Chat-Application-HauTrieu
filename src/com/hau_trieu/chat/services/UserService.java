@@ -63,8 +63,8 @@ public class UserService {
 		System.out.println("Logged out");
 	}
 
-	public void createGroup(int id, User creator, boolean isPrivate) {
-		Group group = new Group(id);
+	public void createGroup(User creator, boolean isPrivate) {
+		Group group = new Group();
 
 		group.addMember(creator);
 
