@@ -1,10 +1,10 @@
-package com.hau_trieu.chat.services;
+package com.hautrieu.chat.services;
 
 import java.util.HashMap;
 import java.util.List;
 
-import com.hau_trieu.chat.domains.Group;
-import com.hau_trieu.chat.domains.User;
+import com.hautrieu.chat.domains.Group;
+import com.hautrieu.chat.domains.User;
 
 public class GroupService {
 

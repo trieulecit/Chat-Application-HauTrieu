@@ -2,7 +2,7 @@ package com.hau_trieu.chat.repositories;
 
 import java.util.function.Predicate;
 
-import com.hau_trieu.chat.domains.BaseEntity;
+import com.hautrieu.chat.domains.BaseEntity;
 
 public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 

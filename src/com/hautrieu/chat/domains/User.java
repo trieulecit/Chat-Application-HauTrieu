@@ -1,5 +1,7 @@
-package com.hau_trieu.chat.domains;
+package com.hautrieu.chat.domains;
 
+
+import com.hau_trieu.chat.services.TextService;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,6 +18,10 @@ public class User extends BaseEntity {
 	private String gender;
 	private String dateOfBirth;
 	
+	public User(String username, String password) {
+		BaseEntity
+		super(id);
+	}
 	public User(int id, String lastName, String firstName, String hashPassword, String gender, String dob) {
 		super(id);
 		this.lastName = lastName;
@@ -25,6 +31,12 @@ public class User extends BaseEntity {
 		this.gender = gender;
 		this.dateOfBirth = dob;
 	}
+	
+	public boolean login(String password) {
+        String hashedInputPassword = hash(password);
+        return this.getHashPassword().equals(hashedInputPassword);
+    }
+	
 
 	public String getLastName() {
 		return lastName;
@@ -51,7 +63,7 @@ public class User extends BaseEntity {
 	}
 
 	public void setHashPassword(String password) {
-		this.hashPassword = passwordHash(password);
+		this.hashPassword = hash(password);
 	}
 
 	public String getGender() {
@@ -67,23 +79,18 @@ public class User extends BaseEntity {
 	}
 
 	public void setDateOfBirth() {
-		
-		Date date = Calendar.getInstance().getTime();  
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
-		String dateString = dateFormat.format(date);  
 
-		
+		Date date = Calendar.getInstance().getTime();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+		String dateString = dateFormat.format(date);
+
 		this.dateOfBirth = dateString;
 	}
 
-	public String passwordHash(String password) {
-		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			byte[] hash = digest.digest(password.getBytes("UTF-8"));
-			return Base64.getEncoder().encodeToString(hash);
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+	public String hash(String password) {
+		TextService textService = new TextService();
+		String hashed = textService.hashMD5(password);
+        return hashed;
 	}
 
 	public String getUsername() {
@@ -93,6 +100,7 @@ public class User extends BaseEntity {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

@@ -1,4 +1,4 @@
-package com.hau_trieu.chat.data;
+package com.hautrieu.chat.data;
 
 public class InMemoryDataStorage extends DataStorage {
 	private static InMemoryDataStorage storage;

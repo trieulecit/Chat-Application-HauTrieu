@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.hau_trieu.chat.domains.User;
-import com.hau_trieu.chat.services.UserService;
+import com.hautrieu.chat.domains.User;
+import com.hautrieu.chat.services.UserService;
 
 class UserServiceTest {
 	User testUser = new User();

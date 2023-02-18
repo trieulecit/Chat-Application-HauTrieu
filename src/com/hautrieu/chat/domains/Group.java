@@ -1,4 +1,4 @@
-package com.hau_trieu.chat.domains;
+package com.hautrieu.chat.domains;
 
 import java.util.ArrayList;
 import java.util.List;

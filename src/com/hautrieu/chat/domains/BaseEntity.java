@@ -1,6 +1,7 @@
-package com.hau_trieu.chat.domains;
+package com.hautrieu.chat.domains;
 
 public class BaseEntity {
+	
 	private int id;
 	
 	public BaseEntity(int id) {
@@ -20,4 +21,5 @@ public class BaseEntity {
             setId(id);
         }
     }
+	
 }

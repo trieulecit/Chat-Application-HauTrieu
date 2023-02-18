@@ -1,4 +1,4 @@
-package com.hau_trieu.chat.domains;
+package com.hautrieu.chat.domains;
 
 public interface File {
 	void upload();

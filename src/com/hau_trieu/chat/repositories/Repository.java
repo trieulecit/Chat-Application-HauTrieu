@@ -2,7 +2,7 @@ package com.hau_trieu.chat.repositories;
 
 import java.util.function.Predicate;
 
-import com.hau_trieu.chat.domains.BaseEntity;
+import com.hautrieu.chat.domains.BaseEntity;
 
 public interface Repository<T extends BaseEntity> {
 	T getById(int id);
