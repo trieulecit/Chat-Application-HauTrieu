@@ -16,6 +16,15 @@ public class Group extends BaseEntity {
 	public User getAdmin() {
 		return admin;
 	}
+	
+	public boolean checkAdmin(User user) {
+		if (user.getId() == this.admin.getId()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 
 	public void setAdmin(User admin) {
 		if (!isPrivate) {

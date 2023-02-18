@@ -4,7 +4,7 @@ public class Message {
 	
 	private User sendUser;
 	private String message;
-	
+	private File attachment;
 	Message(){
 		
 	}
@@ -23,6 +23,14 @@ public class Message {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public File getAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(File attachment) {
+		this.attachment = attachment;
 	}
 	
 }
