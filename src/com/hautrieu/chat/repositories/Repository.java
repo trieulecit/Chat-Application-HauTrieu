@@ -1,4 +1,4 @@
-package com.hau_trieu.chat.repositories;
+package com.hautrieu.chat.repositories;
 
 import java.util.function.Predicate;
 
