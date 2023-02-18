@@ -16,10 +16,18 @@ public class GroupService {
 		this.currentGroup = groups.get(groupName);
 	}
 
-	public void kickMember(User admin, User user) {
-		if (currentGroup.getAdmin().getId() == admin.getId()) {
+	public boolean kickMember(User admin, User user) {
+
+		boolean kicked = false;
+
+		if (currentGroup.checkAdmin(admin) && !currentGroup.checkAdmin(user)) {
+			
 			currentGroup.kickMember(user);
+			
+			kicked = true;
 		}
+		
+		return kicked;
 	}
 
 	public void addMember(User user) {
