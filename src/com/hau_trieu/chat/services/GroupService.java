@@ -10,7 +10,7 @@ public class GroupService {
 
 	private Group currentGroup = null;
 
-	private HashMap<String, Group> groups = new HashMap();
+	private HashMap<String, Group> groups = new HashMap<>();
 
 	public void moveToGroup(String groupName) {
 		this.currentGroup = groups.get(groupName);

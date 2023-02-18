@@ -11,7 +11,7 @@ public class UserService {
 
 	private User currentUser = null;
 
-	private List<User> users = new ArrayList();
+	private List<User> users = new ArrayList<>();
 
 	public void create(User newUser) {
 
