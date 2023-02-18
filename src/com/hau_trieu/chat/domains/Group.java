@@ -3,11 +3,15 @@ package com.hau_trieu.chat.domains;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group {
+public class Group extends BaseEntity {
 	private User admin;
-	private List<User> members = new ArrayList();
-	private List<Message> messages = new ArrayList();
+	private List<User> members = new ArrayList<>();
+	private List<Message> messages = new ArrayList<>();
 	private boolean isPrivate;
+	
+	public Group(int id) {
+		super(id);
+	}
 
 	public User getAdmin() {
 		return admin;

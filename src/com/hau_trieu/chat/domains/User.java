@@ -7,8 +7,7 @@ import java.util.Date;
 import java.util.Base64;
 import java.util.Calendar;
 
-public class User {
-	private int id;
+public class User extends BaseEntity {
 	private String username;
 	private String lastName;
 	private String firstName;
@@ -16,27 +15,15 @@ public class User {
 	private String hashPassword;
 	private String gender;
 	private String dateOfBirth;
-
-	public User(){
-		
-	}
 	
-	public User(String lastName, String firstName, String hashPassword, String gender, String dob) {
-		super();
+	public User(int id, String lastName, String firstName, String hashPassword, String gender, String dob) {
+		super(id);
 		this.lastName = lastName;
 		this.firstName = firstName;
 		fullName = lastName + " " + firstName;
 		this.hashPassword = hashPassword;
 		this.gender = gender;
 		this.dateOfBirth = dob;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getLastName() {
