@@ -1,7 +1,7 @@
 package com.hautrieu.chat.domains;
 
 
-import com.hau_trieu.chat.services.TextService;
+import com.hautrieu.chat.services.TextService;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,8 +18,7 @@ public class User extends BaseEntity {
 	private String gender;
 	private String dateOfBirth;
 	
-	public User(String username, String password) {
-		BaseEntity
+	public User(int id, String username, String password) {
 		super(id);
 	}
 	public User(int id, String lastName, String firstName, String hashPassword, String gender, String dob) {
