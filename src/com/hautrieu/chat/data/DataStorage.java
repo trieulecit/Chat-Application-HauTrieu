@@ -8,6 +8,11 @@ import com.hautrieu.chat.repositories.Repository;
 public abstract class DataStorage {
 	private Repository<User> users;
 	private Repository<Group> groups;
+
+	public DataStorage() {
+		users = new InMemoryRepository<>();
+		groups = new InMemoryRepository<>();
+	}
 	
     public Repository<User> getUsers() {
         return users;
