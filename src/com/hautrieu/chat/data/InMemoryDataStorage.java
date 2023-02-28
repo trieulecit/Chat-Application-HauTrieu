@@ -4,6 +4,7 @@ public class InMemoryDataStorage extends DataStorage {
 	private static InMemoryDataStorage storage;
 
     private InMemoryDataStorage() {
+    	super();
     }
 
     public static InMemoryDataStorage getInstance() {
