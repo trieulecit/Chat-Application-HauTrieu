@@ -5,9 +5,6 @@ public class Message {
 	private User sendUser;
 	private String message;
 	private File attachment;
-	Message(){
-		
-	}
 
 	public User getSendUser() {
 		return sendUser;

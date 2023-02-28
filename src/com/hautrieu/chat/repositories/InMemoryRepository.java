@@ -15,7 +15,7 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	}
 	
 	@Override
-	public T getById(int id) {		
+	public T getById(long id) {		
 		return dictionary.get(id);
 	}
 
