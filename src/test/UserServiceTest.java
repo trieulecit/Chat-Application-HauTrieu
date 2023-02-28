@@ -6,51 +6,48 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.hautrieu.chat.data.DataStorage;
+import com.hautrieu.chat.data.InMemoryDataStorage;
 import com.hautrieu.chat.domains.User;
+import com.hautrieu.chat.services.TextService;
 import com.hautrieu.chat.services.UserService;
 
 class UserServiceTest {
-	User testUser = new User();
-	UserService service = new UserService();
-
+	User testUser;
+	UserService service;
+	DataStorage dataStorage;
+	TextService textService;
 	@BeforeEach
 	void setUp() throws Exception {
-		testUser.setUsername("ola");
-		testUser.setHashPassword("123456");
-		testUser.setFirstName("Hau");
-		testUser.setLastName(" Fang");
-		service.create(testUser);
+		dataStorage = InMemoryDataStorage.getInstance();
+		service = new UserService(dataStorage);
+		textService = new TextService();
+//		service.create(testUser);
 
 	}
 
 	@DisplayName("Sign up test")
 	@Test
 	void test() {
-		User user = new User();
-		service.create(user);
-		service.create(user);
-		service.create(user);
-
-		assertTrue(service.getUserList().size() == 4);
+		assertTrue(service.addUser("hau", "admin"));
 	}
 
 	@DisplayName("Log in test")
 	@Test
 	void test2() {
-		service.login("ola", "123456");
-		assertTrue(service.getCurrentUser() != null);
+		service.addUser("hau", "admin");
+		assertTrue(service.login("hau", "admin"));
 	}
 
 	@DisplayName("Hash Test")
 	@Test
 	void test3() {
+		
 		String nonHash = "123456";
-		
-		String expected = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";
-		
-		String actual = testUser.passwordHash(nonHash);
-		assertTrue(expected.equals(actual));
-		
+		String expected = "e10adc3949ba59abbe56e057f20f883e";
+		String actual = textService.hashMD5(nonHash);
+		assertEquals(expected, actual);
+
 	}
 
 }
