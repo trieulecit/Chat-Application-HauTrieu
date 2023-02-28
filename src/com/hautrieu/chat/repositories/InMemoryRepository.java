@@ -1,6 +1,8 @@
 package com.hautrieu.chat.repositories;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -38,6 +40,19 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<T> getAllMatches(Predicate<T> predicate) {
+		List<T> list = new ArrayList<>();	
+		
+		for(T value: dictionary.values()) {
+			if(predicate.test(value)) {
+				list.add(value);
+			}
+		}
+		
+		return list;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.hautrieu.chat.services;
 
+import java.util.List;
+
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.domains.User;
 
@@ -32,5 +34,8 @@ public class UserService {
 		return true;
 	}
 
+	public List<User> getUsers(String fullName) {
+		return storage.getUsers().getAllMatches(user -> user.getFullName().equals(fullName));
+	}
 	
 }
