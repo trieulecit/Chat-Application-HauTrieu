@@ -8,7 +8,7 @@ import com.hautrieu.chat.domains.BaseEntity;
 
 public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	
-	private Map<Integer, T> dictionary;
+	private Map<Long, T> dictionary;
 	
 	public InMemoryRepository() {
 		dictionary = new HashMap<>();

@@ -2,21 +2,21 @@ package com.hautrieu.chat.domains;
 
 public class BaseEntity {
 	
-	private int id;
+	private long id;
 	
-	public BaseEntity(int id) {
+	public BaseEntity(long id) {
 		this.id = id;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	
-	public void setIdIfNotExist(int id) {
+	public void setIdIfNotExist(long id) {
         if (id != 0) {
             setId(id);
         }

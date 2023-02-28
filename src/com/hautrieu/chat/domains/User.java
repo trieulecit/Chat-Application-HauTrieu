@@ -1,10 +1,12 @@
 package com.hautrieu.chat.domains;
 
 
-import com.hau_trieu.chat.services.TextService;
+import com.hautrieu.chat.services.TextService;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Base64;
 import java.util.Calendar;
@@ -19,10 +21,11 @@ public class User extends BaseEntity {
 	private String dateOfBirth;
 	
 	public User(String username, String password) {
-		BaseEntity
-		super(id);
+		super(generateIdByTime());
+		this.username = username;
+		this.hashPassword = password;
 	}
-	public User(int id, String lastName, String firstName, String hashPassword, String gender, String dob) {
+	public User(long id, String lastName, String firstName, String hashPassword, String gender, String dob) {
 		super(id);
 		this.lastName = lastName;
 		this.firstName = firstName;
@@ -105,6 +108,13 @@ public class User extends BaseEntity {
 	public String toString() {
 		// TODO Auto-generated method stub
 		return this.firstName;
+	}
+	
+	public static long generateIdByTime() {
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		String formattedDate = now.format(formatter);
+		return Long.parseLong(formattedDate);
 	}
 
 }
