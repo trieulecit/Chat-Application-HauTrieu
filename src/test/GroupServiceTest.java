@@ -30,8 +30,6 @@ class GroupServiceTest {
 		service = new UserService(dataStorage);
 		textService = new TextService();
 		groupService = new GroupService(dataStorage);
-//		service.create(testUser);
-
 	}
 
 	@Test
