@@ -1,12 +1,8 @@
 package com.hautrieu.chat.services;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.domains.Group;
 import com.hautrieu.chat.domains.User;
-import com.hautrieu.chat.repositories.Repository;
 
 public class GroupService {
 
@@ -15,7 +11,7 @@ public class GroupService {
 	public GroupService(DataStorage storage) {
 		this.storage = storage;
 	}
-
+	
 	public boolean createGroup(String name, boolean isPrivate) {
 		Group newGroup = new Group(name, isPrivate);
 		Group existing = storage.getGroups().getFirst(group -> group.getName().equals(name));
@@ -30,20 +26,19 @@ public class GroupService {
 	}
 
 	public Group getGroup(String groupName) {
-		Group existing = storage.getGroups().getFirst(group -> group.getName().equals(groupName));
+		Group existing = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
 
 		return existing;
 	}
 
-	public void moveToGroup(long id) {
-//		this.currentGroup = storage.getGroups().i;
-	}
 
 	public boolean kickMember(User admin, User user, Group group) {
 
 		boolean kicked = false;
-
-		if (group.checkAdmin(admin) && !group.checkAdmin(user)) {
+		if (!group.isPrivate()) {
+			return kicked;
+		}
+		if (group.checkAdmin(admin)) {
 
 			group.kickMember(user);
 
@@ -59,14 +54,14 @@ public class GroupService {
 
 	public boolean joinGroup(String groupName, User user) {
 		Group existingGroup = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
-		if (existingGroup != null) {
+		if (existingGroup != null && !existingGroup.isPrivate()) {
 			return existingGroup.addMember(user);
 		} else {
 			return false;
 		}
 	}
 
-	public void setNewAdmin(User admin, User promotedUser, Group group) {
+	public void promoteAdmin(User admin, User promotedUser, Group group) {
 
 		if (group.getAdmin().getId() == admin.getId()) {
 			group.setAdmin(promotedUser);
@@ -74,6 +69,11 @@ public class GroupService {
 
 	}
 	public void privateGroupAdminPromote(User creator,Group group) {
-		group.setAdmin(creator);
+		if (group.isPrivate()) {
+			group.setAdmin(creator);	
+		}
+	}
+	public void leaveGroup(User user, Group group) {
+		group.userLeave(user);
 	}
 }

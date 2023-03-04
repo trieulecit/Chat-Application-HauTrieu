@@ -1,22 +1,23 @@
 package com.hautrieu.chat.domains;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group extends BaseEntity implements MessageReceivable {
-	
+import com.hautrieu.chat.data.DataStorage;
+import com.hautrieu.chat.data.InMemoryDataStorage;
+
+public class Group extends BaseEntity {
+
 	private User admin;
 	private String name;
-	
+
 	private List<User> members = new ArrayList<>();
 	private List<Message> messages = new ArrayList<>();
-	
+
 	private boolean isPrivate;
-	
+
 	public Group(String name, boolean isPrivate) {
-		super(generateIdByTime());
+		super(generateId());
 		this.name = name;
 		this.isPrivate = isPrivate;
 	}
@@ -24,7 +25,7 @@ public class Group extends BaseEntity implements MessageReceivable {
 	public User getAdmin() {
 		return admin;
 	}
-	
+
 	public boolean checkAdmin(User user) {
 		if (user.getId() == this.admin.getId()) {
 			return true;
@@ -33,15 +34,11 @@ public class Group extends BaseEntity implements MessageReceivable {
 		}
 	}
 
-
 	public void setAdmin(User admin) {
 		if (!isPrivate) {
 			return;
-		}
-		for (User member : members) {
-			if (member.getId() == admin.getId()) {
-				this.admin = member;
-			}
+		} else {
+			this.admin = admin;
 		}
 	}
 
@@ -75,7 +72,7 @@ public class Group extends BaseEntity implements MessageReceivable {
 			members.add(user);
 			return true;
 		}
-		
+
 		return false;
 
 	}
@@ -84,9 +81,17 @@ public class Group extends BaseEntity implements MessageReceivable {
 		if (!isPrivate) {
 			return;
 		}
-		for (User member : members) {
-			if (member.getId() == user.getId()) {
-				members.remove(member);
+		for (int i = 0; i < members.size(); i++) {
+			if (members.get(i).getId() == user.getId()) {
+				members.remove(i);
+			}
+		}
+	}
+
+	public void userLeave(User user) {
+		for (int i = 0; i < members.size(); i++) {
+			if (members.get(i).getId() == user.getId()) {
+				members.remove(i);
 			}
 		}
 	}
@@ -115,11 +120,12 @@ public class Group extends BaseEntity implements MessageReceivable {
 			this.isPrivate = isPrivate;
 		}
 	}
-	public static long generateIdByTime() {
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMyyddHHmmss");
-		String formattedDate = now.format(formatter);
-		return Long.parseLong(formattedDate);
+
+	public static long generateId() {
+		DataStorage storage = InMemoryDataStorage.getInstance();
+		long size = storage.getUsers().getSize();
+
+		return size + 1;
 	}
 
 }

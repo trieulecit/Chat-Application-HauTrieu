@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Base64;
 import java.util.Calendar;
 
@@ -22,7 +23,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	private String dateOfBirth;
 	
 	public User(String username, String password) {
-		super(generateIdByTime());
+		super(generateId());
 		this.username = username;
 		this.hashPassword = password;
 	}
@@ -39,7 +40,6 @@ public class User extends BaseEntity implements MessageReceivable {
         String hashedInputPassword = hash(password);
         return this.getHashPassword().equals(hashedInputPassword);
     }
-	
 
 	public String getLastName() {
 		return lastName;
@@ -109,10 +109,9 @@ public class User extends BaseEntity implements MessageReceivable {
 		return this.firstName;
 	}
 	
-	public static long generateIdByTime() {
+	public static long generateId() {
 		DataStorage storage = InMemoryDataStorage.getInstance();
-		long size = storage.getUsers().getSize();
-		
+		long size = storage.getUsers().getSize();		
 		return size + 1;
 	}
 
