@@ -5,6 +5,7 @@ import com.hautrieu.chat.domains.User;
 
 public class UserService {
 
+	private User currentUser;
 	private final DataStorage storage;
 
 	public UserService(DataStorage storage) {
