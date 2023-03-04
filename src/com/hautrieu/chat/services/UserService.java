@@ -44,7 +44,6 @@ public class UserService {
 	public static void main(String[] args) {
 		DataStorage dataStorage = InMemoryDataStorage.getInstance();
 		UserService service = new UserService(dataStorage);
-		TextService textService = new TextService();
 		
 		dataStorage.getUsers().deleteAll();
 		
@@ -57,12 +56,6 @@ public class UserService {
 		firstUser.setLastName("Le Hoang");
 		secondUser.setFirstName("Trieu");
 		secondUser.setLastName("Le Hoang");
-
-		/*
-		 * User thirdUser = dataStorage.getUsers().getFirst(user ->
-		 * user.getUsername().equals("hau")); thirdUser.setFirstName("Hau");
-		 * thirdUser.setLastName("Phan Trung");
-		 */
 
 		List<User> usersMatched = service.getUsers("Trieu Le Hoang");
 		System.out.println(usersMatched.size());

@@ -108,7 +108,6 @@ public class User extends BaseEntity {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return this.firstName;
 	}
 	
