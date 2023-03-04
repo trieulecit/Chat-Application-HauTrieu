@@ -23,7 +23,7 @@ public class User extends BaseEntity {
 	private String dateOfBirth;
 	
 	public User(String username, String password) {
-		super(generateIdByTime());
+		super(generateId());
 		this.username = username;
 		this.hashPassword = password;
 	}
@@ -112,7 +112,7 @@ public class User extends BaseEntity {
 		return this.firstName;
 	}
 	
-	public static long generateIdByTime() {
+	public static long generateId() {
 		DataStorage storage = InMemoryDataStorage.getInstance();
 		long size = storage.getUsers().getSize();
 		

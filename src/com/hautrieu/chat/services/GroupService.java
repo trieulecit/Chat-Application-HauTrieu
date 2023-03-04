@@ -3,47 +3,81 @@ package com.hautrieu.chat.services;
 import java.util.HashMap;
 import java.util.List;
 
+import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.domains.Group;
 import com.hautrieu.chat.domains.User;
+import com.hautrieu.chat.repositories.Repository;
 
 public class GroupService {
 
-	private Group currentGroup = null;
+	private final DataStorage storage;
 
-	private HashMap<String, Group> groups = new HashMap<>();
+	public GroupService(DataStorage storage) {
+		this.storage = storage;
+	}
+	
+	public boolean createGroup(String name, boolean isPrivate) {
+		Group newGroup = new Group(name, isPrivate);
+		Group existing = storage.getGroups().getFirst(group -> group.getName().equals(name));
 
-	public void moveToGroup(String groupName) {
-		this.currentGroup = groups.get(groupName);
+		if (existing == null) {
+			storage.getGroups().add(newGroup);
+		} else 
+		{
+			return false;
+		}
+		return true;
 	}
 
-	public boolean kickMember(User admin, User user) {
+	public Group getGroup(String groupName) {
+		Group existing = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
+
+		return existing;
+	}
+
+
+	public boolean kickMember(User admin, User user, Group group) {
 
 		boolean kicked = false;
+		if (!group.isPrivate()) {
+			return kicked;
+		}
+		if (group.checkAdmin(admin)) {
 
-		if (currentGroup.checkAdmin(admin) && !currentGroup.checkAdmin(user)) {
-			
-			currentGroup.kickMember(user);
-			
+			group.kickMember(user);
+
 			kicked = true;
 		}
-		
+
 		return kicked;
 	}
 
-	public void addMember(User user) {
-		currentGroup.addMember(user);
+	public boolean addMember(User user, Group group) {
+		return group.addMember(user);
 	}
 
 	public boolean joinGroup(String groupName, User user) {
-		boolean joined = groups.get(groupName).addMember(user);
-		return joined;
+		Group existingGroup = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
+		if (existingGroup != null && !existingGroup.isPrivate()) {
+			return existingGroup.addMember(user);
+		} else {
+			return false;
+		}
 	}
 
-	public void setAdmin(User admin, User promotedUser, Group group) {
+	public void promoteAdmin(User admin, User promotedUser, Group group) {
 
-		if (currentGroup.getAdmin().getId() == admin.getId()) {
-			currentGroup.setAdmin(promotedUser);
+		if (group.getAdmin().getId() == admin.getId()) {
+			group.setAdmin(promotedUser);
 		}
 
+	}
+	public void privateGroupAdminPromote(User creator,Group group) {
+		if (group.isPrivate()) {
+			group.setAdmin(creator);	
+		}
+	}
+	public void leaveGroup(User user, Group group) {
+		group.userLeave(user);
 	}
 }
