@@ -1,6 +1,8 @@
 package com.hautrieu.chat.domains;
 
 
+import com.hautrieu.chat.data.DataStorage;
+import com.hautrieu.chat.data.InMemoryDataStorage;
 import com.hautrieu.chat.services.TextService;
 import java.security.MessageDigest;
 import java.text.DateFormat;
@@ -58,7 +60,7 @@ public class User extends BaseEntity {
 	}
 
 	public String getFullName() {
-		return this.firstName + this.lastName;
+		return this.firstName + " " + this.lastName;
 	}
 
 	public String getHashPassword() {
@@ -111,10 +113,10 @@ public class User extends BaseEntity {
 	}
 	
 	public static long generateIdByTime() {
-		LocalDateTime now = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-		String formattedDate = now.format(formatter);
-		return Long.parseLong(formattedDate);
+		DataStorage storage = InMemoryDataStorage.getInstance();
+		long size = storage.getUsers().getSize();
+		
+		return size + 1;
 	}
 
 }

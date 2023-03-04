@@ -43,7 +43,7 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	}
 
 	@Override
-	public List<T> getAllMatches(Predicate<T> predicate) {
+	public List<T> getAllMatching(Predicate<T> predicate) {
 		List<T> list = new ArrayList<>();	
 		
 		for(T value: dictionary.values()) {
@@ -53,6 +53,11 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 		}
 		
 		return list;
+	}
+
+	@Override
+	public long getSize() {
+		return (int) dictionary.size();
 	}
 
 }

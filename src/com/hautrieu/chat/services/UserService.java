@@ -1,8 +1,11 @@
 package com.hautrieu.chat.services;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 
 import com.hautrieu.chat.data.DataStorage;
+import com.hautrieu.chat.data.InMemoryDataStorage;
 import com.hautrieu.chat.domains.User;
 
 public class UserService {
@@ -35,7 +38,34 @@ public class UserService {
 	}
 
 	public List<User> getUsers(String fullName) {
-		return storage.getUsers().getAllMatches(user -> user.getFullName().equals(fullName));
+		return storage.getUsers().getAllMatching(user -> user.getFullName().equals(fullName));
+	}
+	
+	public static void main(String[] args) {
+		DataStorage dataStorage = InMemoryDataStorage.getInstance();
+		UserService service = new UserService(dataStorage);
+		TextService textService = new TextService();
+		
+		dataStorage.getUsers().deleteAll();
+		
+		service.addUser("trieu", "password");
+		service.addUser("somebody", "somebody");
+
+		User firstUser = dataStorage.getUsers().getFirst(user -> user.getUsername().equals("somebody"));
+		User secondUser = dataStorage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
+		firstUser.setFirstName("Trieu");
+		firstUser.setLastName("Le Hoang");
+		secondUser.setFirstName("Trieu");
+		secondUser.setLastName("Le Hoang");
+
+		/*
+		 * User thirdUser = dataStorage.getUsers().getFirst(user ->
+		 * user.getUsername().equals("hau")); thirdUser.setFirstName("Hau");
+		 * thirdUser.setLastName("Phan Trung");
+		 */
+
+		List<User> usersMatched = service.getUsers("Trieu Le Hoang");
+		System.out.println(usersMatched.size());
 	}
 	
 }
