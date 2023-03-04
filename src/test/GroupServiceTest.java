@@ -115,5 +115,21 @@ class GroupServiceTest {
 		
 		assertEquals(1, testGroup.getMembers().size());
 	}
+	@Test
+	void testLeaveGroup() {
+		testUser = new User("Phuc Nguyen", "123");
+		testAdmin = new User("Hawk Phan", "123");
+		
+		groupService.createGroup("CSE 422", false);
+		groupService.joinGroup("CSE 422", testAdmin);
+		groupService.joinGroup("CSE 422", testUser);		
+		
+
+		testGroup = groupService.getGroup("CSE 422");
+		
+		groupService.leaveGroup(testUser, testGroup);
+		
+		assertEquals(1, testGroup.getMembers().size());
+	}
 	
 }
