@@ -1,16 +1,24 @@
 package com.hautrieu.chat.domains;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Group extends BaseEntity {
+	
 	private User admin;
+	private String name;
+	
 	private List<User> members = new ArrayList<>();
 	private List<Message> messages = new ArrayList<>();
+	
 	private boolean isPrivate;
 	
-	public Group(int id) {
-		super(id);
+	public Group(String name, boolean isPrivate) {
+		super(generateIdByTime());
+		this.name = name;
+		this.isPrivate = isPrivate;
 	}
 
 	public User getAdmin() {
@@ -37,6 +45,14 @@ public class Group extends BaseEntity {
 		}
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public List<User> getMembers() {
 		return members;
 	}
@@ -57,9 +73,10 @@ public class Group extends BaseEntity {
 		}
 		if (!userIsInGroup) {
 			members.add(user);
+			return true;
 		}
 		
-		return userIsInGroup;
+		return false;
 
 	}
 
@@ -98,4 +115,11 @@ public class Group extends BaseEntity {
 			this.isPrivate = isPrivate;
 		}
 	}
+	public static long generateIdByTime() {
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMyyddHHmmss");
+		String formattedDate = now.format(formatter);
+		return Long.parseLong(formattedDate);
+	}
+
 }
