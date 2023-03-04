@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Group extends BaseEntity {
+public class Group extends BaseEntity implements MessageReceivable {
 	
 	private User admin;
 	private String name;

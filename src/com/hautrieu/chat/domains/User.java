@@ -13,11 +13,10 @@ import java.util.Date;
 import java.util.Base64;
 import java.util.Calendar;
 
-public class User extends BaseEntity {
+public class User extends BaseEntity implements MessageReceivable {
 	private String username;
 	private String lastName;
 	private String firstName;
-	private String fullName;
 	private String hashPassword;
 	private String gender;
 	private String dateOfBirth;
@@ -31,7 +30,6 @@ public class User extends BaseEntity {
 		super(id);
 		this.lastName = lastName;
 		this.firstName = firstName;
-		fullName = lastName + " " + firstName;
 		this.hashPassword = hashPassword;
 		this.gender = gender;
 		this.dateOfBirth = dob;

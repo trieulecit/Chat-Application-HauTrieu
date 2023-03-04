@@ -1,33 +1,57 @@
 package com.hautrieu.chat.domains;
 
+import java.util.Map;
+
 public class Message {
 	
-	private User sendUser;
-	private String message;
-	private File attachment;
+	private User sender;
+	private MessageReceivable receiver;
+	private String content;
+	private Map<Long, File> attachments;
+	private long timestamp;	
 
-	public User getSendUser() {
-		return sendUser;
+	public Message(User sender, MessageReceivable receiver, String content, Map<Long, File> attachments) {
+		super();
+		this.sender = sender;
+		this.receiver = receiver;
+		this.content = content;
+		this.attachments = attachments;
+		this.timestamp = System.currentTimeMillis();
 	}
 
-	public void setSendUser(User sendUser) {
-		this.sendUser = sendUser;
+	public User getSender() {
+		return sender;
 	}
 
-	public String getMessage() {
-		return message;
+	public void setSender(User sendUser) {
+		sender = sendUser;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public String getContent() {
+		return content;
 	}
 
-	public File getAttachment() {
-		return attachment;
+	public void setContent(String message) {
+		this.content = message;
 	}
 
-	public void setAttachment(File attachment) {
-		this.attachment = attachment;
+	public MessageReceivable getReceiver() {
+		return receiver;
 	}
-	
+
+	public void setReceiver(MessageReceivable receiver) {
+		this.receiver = receiver;
+	}
+
+	public Map<Long, File> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(Map<Long, File> attachments) {
+		this.attachments = attachments;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
+	}
 }
