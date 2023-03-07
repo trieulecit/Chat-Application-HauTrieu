@@ -19,22 +19,24 @@ class GroupServiceTest {
 	User testAdmin;
 	Group testGroup;
 
-	UserService service;
+	UserService userService;
 
-	DataStorage dataStorage;
+	DataStorage storage;
 	TextService textService;
 	GroupService groupService;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		dataStorage = InMemoryDataStorage.getInstance();
-		service = new UserService(dataStorage);
+		storage = InMemoryDataStorage.getInstance();
+		userService = new UserService(storage);
 		textService = new TextService();
-		groupService = new GroupService(dataStorage);
+		groupService = new GroupService(storage);
 	}
+
 	@AfterEach
 	void clear() {
-		dataStorage.getGroups().deleteAll();
+		storage.getGroups().deleteAll();
+		storage.getUsers().deleteAll();
 	}
 
 	@Test
@@ -48,6 +50,7 @@ class GroupServiceTest {
 		groupService.createGroup("CSE 423", false);
 		assertTrue(groupService.joinGroup("CSE 423", testUser));
 	}
+
 	@Test
 	void testJoinPrivateGroup() {
 		groupService.createGroup("CSE 423", true);
@@ -56,65 +59,78 @@ class GroupServiceTest {
 
 	@Test
 	void testKick() {
-		testUser = new User("Phuc Nguyen", "123");
-		testAdmin = new User("Hawk Phan", "123");
-		
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
+
 		groupService.createGroup("CSE 423", true);
 		testGroup = groupService.getGroup("CSE 423");
-		
+
 		groupService.privateGroupAdminPromote(testAdmin, testGroup);
 		groupService.addMember(testUser, testGroup);
-		
-		System.out.println(testGroup.getMembers().size());
-		
+
 		assertTrue(groupService.kickMember(testAdmin, testUser, testGroup));
 
 	}
+
 	@Test
 	void testKickPublicGroup() {
-		testUser = new User("Phuc Nguyen", "123");
-		testAdmin = new User("Hawk Phan", "123");
-		
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
+
 		groupService.createGroup("CSE 422", false);
 		groupService.joinGroup("CSE 422", testUser);
 		groupService.joinGroup("CSE 422", testAdmin);
-		
+
 		testGroup = groupService.getGroup("CSE 422");
-		
+
 		assertFalse(groupService.kickMember(testAdmin, testUser, testGroup));
 
 	}
+
 	@Test
 	void testPromoteNewAdmin() {
-		testUser = new User("Phuc Nguyen", "123");
-		testAdmin = new User("Hawk Phan", "123");
-		
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
+
 		groupService.createGroup("CSE 422", true);
 		testGroup = groupService.getGroup("CSE 422");
 		groupService.privateGroupAdminPromote(testAdmin, testGroup);
-		
-		//test user become admin
+
+		// test user become admin
 		groupService.promoteAdmin(testAdmin, testUser, testGroup);
-		
+
 		assertTrue(groupService.kickMember(testUser, testAdmin, testGroup));
-		
+		assertEquals(testUser.getId(), testGroup.getAdmin().getId());
 	}
 
 	@Test
 	void testLeaveGroup() {
-		testUser = new User("Phuc Nguyen", "123");
-		testAdmin = new User("Hawk Phan", "123");
-		
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
 		groupService.createGroup("CSE 422", false);
 		groupService.joinGroup("CSE 422", testAdmin);
-		groupService.joinGroup("CSE 422", testUser);		
-		
+		groupService.joinGroup("CSE 422", testUser);
 
 		testGroup = groupService.getGroup("CSE 422");
-		
+
 		groupService.leaveGroup(testUser, testGroup);
-		
 		assertEquals(1, testGroup.getMembers().size());
 	}
-	
+
 }
