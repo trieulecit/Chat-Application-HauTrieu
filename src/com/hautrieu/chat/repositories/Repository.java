@@ -9,7 +9,9 @@ public interface Repository<T extends BaseEntity> {
 	T getById(long id);
     boolean add(T addingEntity);
     void deleteAll();
-    long getSize();
+    long getNextId();
     T getFirst(Predicate<T> predicate);
+    T removeFirst(Predicate<T> predicate);
+    long getSize();
     List<T> getAllMatching(Predicate<T> predicate);
 }

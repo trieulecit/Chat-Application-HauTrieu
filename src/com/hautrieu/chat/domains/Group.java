@@ -123,9 +123,7 @@ public class Group extends BaseEntity {
 
 	public static long generateId() {
 		DataStorage storage = InMemoryDataStorage.getInstance();
-		long size = storage.getUsers().getSize();
-
-		return size + 1;
+		return storage.getUsers().getNextId();
 	}
 
 }

@@ -29,7 +29,7 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 
 	@Override
 	public void deleteAll() {
-		dictionary.clear();		
+		dictionary.clear();	
 	}
 
 	@Override
@@ -56,8 +56,24 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	}
 
 	@Override
+	public long getNextId() {
+		return (int) dictionary.size() + 1;
+	}
+
+	@Override
+	public T removeFirst(Predicate<T> predicate) {
+		for(T value: dictionary.values()) {
+			if(predicate.test(value)) {
+				dictionary.remove(value.getId());
+				return value;
+			}
+		}
+		return null;
+	}
+
+	@Override
 	public long getSize() {
-		return (int) dictionary.size();
+		return dictionary.size();
 	}
 
 }

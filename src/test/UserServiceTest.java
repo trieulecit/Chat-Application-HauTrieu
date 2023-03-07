@@ -28,7 +28,6 @@ class UserServiceTest {
 		dataStorage = InMemoryDataStorage.getInstance();
 		service = new UserService(dataStorage);
 		textService = new TextService();
-
 	}
 	
 	@AfterEach

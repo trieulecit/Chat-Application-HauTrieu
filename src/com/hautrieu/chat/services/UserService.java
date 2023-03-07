@@ -14,7 +14,7 @@ public class UserService {
 	}
 
 	public boolean login(String username, String password) {
-		User attemptedUser = storage.getUsers().getFirst(user -> user.getUsername().equals(username));
+		User attemptedUser = findUserByUserName(username);
 		if (attemptedUser == null) {
 			return false;
 		}
@@ -23,7 +23,7 @@ public class UserService {
 
 	public boolean addUser(String username, String password) {
 		TextService service = new TextService();
-		User existing = storage.getUsers().getFirst(user -> user.getUsername().equals(username));
+		User existing = findUserByUserName(username);
 		
 		if (existing != null) {
 			return false;
@@ -36,6 +36,10 @@ public class UserService {
 
 	public List<User> getUsers(String fullName) {
 		return storage.getUsers().getAllMatching(user -> user.getFullName().equals(fullName));
-	}	
+	}
+	
+	private User findUserByUserName(String username) {
+		return storage.getUsers().getFirst(user -> user.getUsername().equals(username));
+	}
 	
 }

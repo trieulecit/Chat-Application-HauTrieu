@@ -10,10 +10,10 @@ public class Message extends BaseEntity {
 	private User sender;
 	private MessageReceivable receiver;
 	private String content;
-	private List<File> attachments;
+	private List<InMemoryFile> attachments;
 	private long timestamp;	
 
-	public Message(User sender, MessageReceivable receiver, String content, List<File> attachments) {
+	public Message(User sender, MessageReceivable receiver, String content, List<InMemoryFile> attachments) {
 		super(generateId());
 		this.sender = sender;
 		this.receiver = receiver;
@@ -24,8 +24,7 @@ public class Message extends BaseEntity {
 	
 	public static long generateId() {
 		DataStorage storage = InMemoryDataStorage.getInstance();
-		long size = storage.getMessages().getSize();		
-		return size + 1;
+		return storage.getMessages().getNextId();		
 	}
 
 	public User getSender() {
@@ -52,11 +51,11 @@ public class Message extends BaseEntity {
 		this.receiver = receiver;
 	}
 
-	public List<File> getAttachments() {
+	public List<InMemoryFile> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(List<File> attachments) {
+	public void setAttachments(List<InMemoryFile> attachments) {
 		this.attachments = attachments;
 	}
 

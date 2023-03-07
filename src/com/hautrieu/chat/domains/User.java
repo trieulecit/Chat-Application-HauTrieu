@@ -1,6 +1,5 @@
 package com.hautrieu.chat.domains;
 
-
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
 import com.hautrieu.chat.services.TextService;
@@ -111,8 +110,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	
 	public static long generateId() {
 		DataStorage storage = InMemoryDataStorage.getInstance();
-		long size = storage.getUsers().getSize();		
-		return size + 1;
+		return storage.getUsers().getNextId();		
 	}
 
 }
