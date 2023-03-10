@@ -1,5 +1,7 @@
 package com.hautrieu.chat.services;
 
+import java.util.List;
+
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.domains.Group;
 import com.hautrieu.chat.domains.User;
@@ -11,15 +13,14 @@ public class GroupService {
 	public GroupService(DataStorage storage) {
 		this.storage = storage;
 	}
-	
+
 	public boolean createGroup(String name, boolean isPrivate) {
 		Group newGroup = new Group(name, isPrivate);
 		Group existing = storage.getGroups().getFirst(group -> group.getName().equals(name));
 
 		if (existing == null) {
 			storage.getGroups().add(newGroup);
-		} else 
-		{
+		} else {
 			return false;
 		}
 		return true;
@@ -30,7 +31,6 @@ public class GroupService {
 
 		return existing;
 	}
-
 
 	public boolean kickMember(User admin, User user, Group group) {
 
@@ -53,12 +53,14 @@ public class GroupService {
 	}
 
 	public boolean joinGroup(String groupName, User user) {
+		boolean joined = false;
 		Group existingGroup = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
 		if (existingGroup != null && !existingGroup.isPrivate()) {
-			return existingGroup.addMember(user);
-		} else {
-			return false;
+			user.addGroup(existingGroup);
+			joined = existingGroup.addMember(user);
 		}
+		return joined;
+
 	}
 
 	public void promoteAdmin(User admin, User promotedUser, Group group) {
@@ -68,12 +70,20 @@ public class GroupService {
 		}
 
 	}
-	public void privateGroupAdminPromote(User creator,Group group) {
+
+	public void privateGroupAdminPromote(User creator, Group group) {
 		if (group.isPrivate()) {
-			group.setAdmin(creator);	
+			group.setAdmin(creator);
 		}
 	}
+
 	public void leaveGroup(User user, Group group) {
 		group.userLeave(user);
+		user.leaveGroup(group);
+	}
+
+	public List<Group> GetGroupsOfUser(User user) {
+		
+		return user.getGroups();
 	}
 }

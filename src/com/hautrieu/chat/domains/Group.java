@@ -70,6 +70,7 @@ public class Group extends BaseEntity {
 		}
 		if (!userIsInGroup) {
 			members.add(user);
+			user.addGroup(this);
 			return true;
 		}
 
