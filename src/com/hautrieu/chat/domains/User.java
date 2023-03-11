@@ -9,14 +9,15 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class User extends BaseEntity implements MessageReceivable {
-	
+
 	private final DataStorage storage;
-	
+
 	private String username;
 	private String lastName;
 	private String firstName;
@@ -35,7 +36,7 @@ public class User extends BaseEntity implements MessageReceivable {
 		this.userGroups = new ArrayList<>();
 		this.alias = new HashMap<>();
 	}
-	
+
 	public boolean login(String password) {
 		String hashedInputPassword = hash(password);
 		return this.getHashPassword().equals(hashedInputPassword);
@@ -108,7 +109,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	public String toString() {
 		return this.firstName;
 	}
-	
+
 	@Override
 	public long getReceiverId() {
 		return getId();
@@ -149,6 +150,18 @@ public class User extends BaseEntity implements MessageReceivable {
 			}
 		}
 		return postition;
+	}
+
+	public String getUserAliasOrDefault(User otherUser) {
+		String userAlias = this.getUsername();
+		if (alias.containsKey(otherUser.getUsername())) {
+			userAlias = alias.get(otherUser.getUsername());
+		}
+		return userAlias;
+	}
+
+	public void addAlias(String assignorUsername, String assigneeCodename) {
+		alias.put(assignorUsername, assigneeCodename);
 	}
 
 }

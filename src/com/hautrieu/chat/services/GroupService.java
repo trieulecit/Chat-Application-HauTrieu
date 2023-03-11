@@ -83,7 +83,9 @@ public class GroupService {
 	}
 
 	public List<Group> GetGroupsOfUser(User user) {
-		
 		return user.getGroups();
+	}
+	public void setAliasForUser(User assignor, User assignee, String codename) {
+		assignee.addAlias(assignor.getUsername(), codename);
 	}
 }

@@ -16,6 +16,7 @@ import com.hautrieu.chat.services.UserService;
 
 class GroupServiceTest {
 	User testUser;
+	User testUser2;
 	User testAdmin;
 	Group testGroup;
 
@@ -81,8 +82,8 @@ class GroupServiceTest {
 
 		groupService.createGroup("CSE 423", true);
 		testGroup = groupService.getGroup("CSE 423");
-
 		groupService.privateGroupAdminPromote(testAdmin, testGroup);
+
 		groupService.addMember(testUser, testGroup);
 
 		assertTrue(groupService.kickMember(testAdmin, testUser, testGroup));
@@ -143,5 +144,32 @@ class GroupServiceTest {
 		groupService.leaveGroup(testUser, testGroup);
 		assertEquals(1, testGroup.getMembers().size());
 	}
+
+	@Test
+	void testAlias() {
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+		userService.addUser("Ngoc Suong", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+		testUser2 = storage.getUsers().getFirst(user -> user.getUsername().equals("Ngoc Suong"));
+
+		groupService.createGroup("CSE 422", false);
+		groupService.joinGroup("CSE 422", testAdmin);
+		groupService.joinGroup("CSE 422", testUser);
+		groupService.joinGroup("CSE 422", testUser2);
+		
+		groupService.setAliasForUser(testUser, testUser2, "Honey");
+		
+		testGroup = groupService.getGroup("CSE 422");
+		
+		String result = testUser2.getUserAliasOrDefault(testUser);
+		String expected = "Honey";
+		assertEquals(expected, result);
+		assertEquals("Ngoc Suong", testUser2.getUserAliasOrDefault(testAdmin));
+	}
+	
+	
 
 }

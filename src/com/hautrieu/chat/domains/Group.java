@@ -89,8 +89,8 @@ public class Group extends BaseEntity implements MessageReceivable  {
 		}
 		for (int i = 0; i < members.size(); i++) {
 			if (members.get(i).getId() == user.getId()) {
-				members.remove(i);
 				members.get(i).leaveGroup(this);
+				members.remove(i);
 			}
 		}
 	}
@@ -98,8 +98,8 @@ public class Group extends BaseEntity implements MessageReceivable  {
 	public void userLeave(User user) {
 		for (int i = 0; i < members.size(); i++) {
 			if (members.get(i).getId() == user.getId()) {
-				members.remove(i);
 				members.get(i).leaveGroup(this);
+				members.remove(i);
 			}
 		}
 	}
