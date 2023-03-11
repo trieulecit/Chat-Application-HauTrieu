@@ -8,13 +8,10 @@ import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
 
 public class InMemoryFile extends BaseEntity {
-	private final DataStorage storage;
 
 	private String extension;
 	
 	public InMemoryFile(String extension) {
-		storage = InMemoryDataStorage.getInstance();
-		this.setId(storage.getFiles().getNextId());
 		this.extension = extension;
 	}
 	
@@ -34,11 +31,9 @@ public class InMemoryFile extends BaseEntity {
             file.createNewFile();
             
             Files.copy(source, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            
-            System.out.println("File uploaded successfully to: " + file.getAbsolutePath());        
-            
+                      
             storage.getFiles().add(targetFile);
-            
+            System.out.println("File uploaded successfully to: " + file.getAbsolutePath()); 
             return targetFile;
         
 		} catch (IOException e) {

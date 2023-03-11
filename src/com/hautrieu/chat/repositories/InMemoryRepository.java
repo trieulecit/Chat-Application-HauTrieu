@@ -23,7 +23,9 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 
 	@Override
 	public void add(T addingEntity) {
-		dictionary.put(addingEntity.getId(), addingEntity);
+		long id = getNextId();
+		addingEntity.setId(id);
+		dictionary.put(id, addingEntity);
 	}
 
 	@Override

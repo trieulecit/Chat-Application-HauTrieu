@@ -18,6 +18,7 @@ import com.hautrieu.chat.services.TextService;
 import com.hautrieu.chat.services.UserService;
 
 class UserServiceTest {
+	
 	User testUser;
 	UserService service;
 	DataStorage dataStorage;
@@ -25,29 +26,26 @@ class UserServiceTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		
 		dataStorage = InMemoryDataStorage.getInstance();
-		service = new UserService(dataStorage);
-		textService = new TextService();
-	}
-	
-	@AfterEach
-	void clearData() {
 		dataStorage.getGroups().deleteAll();
 		dataStorage.getUsers().deleteAll();
+		service = new UserService(dataStorage);
+		textService = new TextService();
 	}
 
 	@DisplayName("Sign up test")
 	@Test
 	void testSignUp() {
+		
 		assertTrue(service.addUser("trieu", "trieu"));
-		assertTrue(service.addUser("hau", "hau"));
-		assertTrue(service.addUser("somebody", "somebody"));				
+		assertTrue(service.addUser("hau", "hau"));				
 	}
 
 	@DisplayName("Log in test")
-
 	@Test
 	void testLogin() {
+		
 		service.addUser("hau", "admin");
 		assertTrue(service.login("hau", "admin"));
 	}
@@ -55,34 +53,38 @@ class UserServiceTest {
 	@DisplayName("Hash Test")
 	@Test
 	void testHashing() {
+		
 		String nonHash = "123456";
 		String expected = "e10adc3949ba59abbe56e057f20f883e";
 		String actual = textService.hashMD5(nonHash);
+		
 		assertEquals(expected, actual);
-
 	}
 
 	@DisplayName("Get All Users Matching a string")
 	@Test
 	void testGetAllUsersMatching() {
-		assertTrue(service.addUser("trieu", "trieu"));
-		assertTrue(service.addUser("somebody", "somebody"));
 
 		Repository<User> users = dataStorage.getUsers();
 		
-		User firstUser = users.getFirst(user -> user.getUsername().equals("somebody"));
-		firstUser.setFirstName("Trieu");
-		firstUser.setLastName("Le Hoang");
-
-		User secondUser = users.getFirst(user -> user.getUsername().equals("trieu"));
-		secondUser.setFirstName("Trieu");
-		secondUser.setLastName("Le Hoang");
-
+		seedUser("somebody", "somebody", users);
+		seedUser("trieu", "trieu", users);
 
 		List<User> usersMatched = service.getUsers("Trieu Le Hoang");
 
 		assertEquals(2, usersMatched.size());
-
+	}
+	
+	private User seedUser(String username, String password, Repository<User> users) {
+		
+		service.addUser(username, password);
+		
+		User user = users.getFirst(userItem -> userItem.getUsername().equals(username));
+		
+		user.setFirstName("Trieu");
+		user.setLastName("Le Hoang");
+		
+		return user;
 	}
 
 }

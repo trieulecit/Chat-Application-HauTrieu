@@ -6,8 +6,6 @@ import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
 
 public class Message extends BaseEntity {
-	
-	private final DataStorage storage;
 
 	private User sender;
 	private MessageReceivable receiver;
@@ -17,8 +15,6 @@ public class Message extends BaseEntity {
 	private boolean deleted;
 
 	public Message(User sender, MessageReceivable receiver, String content, List<InMemoryFile> attachments) {
-		storage = InMemoryDataStorage.getInstance();
-		this.setId(storage.getMessages().getNextId());
 		this.sender = sender;
 		this.receiver = receiver;
 		this.content = content;

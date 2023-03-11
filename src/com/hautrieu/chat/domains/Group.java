@@ -7,8 +7,6 @@ import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
 
 public class Group extends BaseEntity implements MessageReceivable  {
-
-	private final DataStorage storage;
 	
 	private User admin;
 	private String name;
@@ -19,10 +17,10 @@ public class Group extends BaseEntity implements MessageReceivable  {
 	private boolean isPrivate;
 
 	public Group(String name, boolean isPrivate) {
+		
 		members = new ArrayList<>();
 		messages = new ArrayList<>();
-		storage = InMemoryDataStorage.getInstance();
-		this.setId(storage.getGroups().getNextId());
+
 		this.name = name;
 		this.isPrivate = isPrivate;
 	}
