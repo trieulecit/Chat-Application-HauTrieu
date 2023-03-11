@@ -35,13 +35,14 @@ class InMemoryFileTest {
 		file = file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
 		System.out.println(file.getFullFileName());
 		assertEquals(1, storage.getFiles().getSize());
-		assertDoesNotThrow(() -> file.delete());
+		file.delete();
 	}
 	
 	@Test
 	void testOpen() {
 		file = file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
-		assertDoesNotThrow(() -> file.open()); 
+		assertDoesNotThrow(() -> file.open());
+		file.delete();
 	}
 	
 	@Test

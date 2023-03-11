@@ -14,8 +14,6 @@ import java.util.Calendar;
 
 public class User extends BaseEntity implements MessageReceivable {
 	
-	private final DataStorage storage;
-	
 	private String username;
 	private String lastName;
 	private String firstName;
@@ -27,8 +25,6 @@ public class User extends BaseEntity implements MessageReceivable {
 	private List<Group> userGroups;
 
 	public User(String username, String password) {
-		storage = InMemoryDataStorage.getInstance();
-		this.setId(storage.getUsers().getNextId());
 		this.username = username;
 		this.hashPassword = password;
 		this.userGroups = new ArrayList<>();
