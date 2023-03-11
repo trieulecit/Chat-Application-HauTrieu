@@ -4,6 +4,7 @@ import com.hautrieu.chat.domains.Group;
 import com.hautrieu.chat.domains.InMemoryFile;
 import com.hautrieu.chat.domains.Message;
 import com.hautrieu.chat.domains.User;
+
 import com.hautrieu.chat.repositories.InMemoryRepository;
 import com.hautrieu.chat.repositories.Repository;
 

@@ -8,33 +8,32 @@ import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
 
 public class InMemoryFile extends BaseEntity {
-	
+	private final DataStorage storage;
+
 	private String extension;
 	
 	public InMemoryFile(String extension) {
-		super(generateId());
+		storage = InMemoryDataStorage.getInstance();
+		this.setId(storage.getFiles().getNextId());
 		this.extension = extension;
 	}
 	
-	public static long generateId() {
-		DataStorage storage = InMemoryDataStorage.getInstance();
-		return storage.getFiles().getNextId();	
-	}
-	
-	public InMemoryFile upload(String extension, Path filePath) {
+	public InMemoryFile upload(String extension, Path source) {
 		DataStorage storage = InMemoryDataStorage.getInstance();
         InMemoryFile targetFile = new InMemoryFile(extension);
 
 		try {
+			
             File folder = new File("src/files");
+            
             if (!folder.exists()) {
                 folder.mkdirs();
-            }
+            }          
             
             File file = new File(folder, targetFile.getFullFileName());
             file.createNewFile();
             
-            Files.copy(filePath, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
             
             System.out.println("File uploaded successfully to: " + file.getAbsolutePath());        
             
@@ -48,8 +47,10 @@ public class InMemoryFile extends BaseEntity {
 		
 		return null;
 	}
+	
 	public void open() {
 		try {
+			
             File file = new File("src/files" + "/" + getFullFileName());
             Path path = file.toPath();
             String absolutePath = path.toAbsolutePath().toString();

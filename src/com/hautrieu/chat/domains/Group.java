@@ -6,18 +6,23 @@ import java.util.List;
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
 
-public class Group extends BaseEntity {
+public class Group extends BaseEntity implements MessageReceivable  {
 
+	private final DataStorage storage;
+	
 	private User admin;
 	private String name;
-
-	private List<User> members = new ArrayList<>();
-	private List<Message> messages = new ArrayList<>();
+	
+	private List<User> members;
+	private List<Message> messages;
 
 	private boolean isPrivate;
 
 	public Group(String name, boolean isPrivate) {
-		super(generateId());
+		members = new ArrayList<>();
+		messages = new ArrayList<>();
+		storage = InMemoryDataStorage.getInstance();
+		this.setId(storage.getGroups().getNextId());
 		this.name = name;
 		this.isPrivate = isPrivate;
 	}
@@ -113,17 +118,17 @@ public class Group extends BaseEntity {
 	}
 
 	public void setPrivate(boolean isPrivate, User creator) {
+		
 		if (isPrivate == false) {
 			this.admin = null;
 		} else {
 			this.admin = creator;
 			this.isPrivate = isPrivate;
-		}
+		}		
 	}
 
-	public static long generateId() {
-		DataStorage storage = InMemoryDataStorage.getInstance();
-		return storage.getUsers().getNextId();
+	@Override
+	public long getReceiverId() {
+		return getId();
 	}
-
 }

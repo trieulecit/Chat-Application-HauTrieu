@@ -7,11 +7,10 @@ public class InMemoryDataStorage extends DataStorage {
     }
 
     public static InMemoryDataStorage getInstance() {
+    	
         if (storage == null) {
             storage = new InMemoryDataStorage();
         }
         return storage;
     }
-    
-
 }

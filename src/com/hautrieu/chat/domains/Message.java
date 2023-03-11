@@ -7,24 +7,32 @@ import com.hautrieu.chat.data.InMemoryDataStorage;
 
 public class Message extends BaseEntity {
 	
+	private final DataStorage storage;
+
 	private User sender;
 	private MessageReceivable receiver;
 	private String content;
 	private List<InMemoryFile> attachments;
 	private long timestamp;	
+	private boolean deleted;
 
 	public Message(User sender, MessageReceivable receiver, String content, List<InMemoryFile> attachments) {
-		super(generateId());
+		storage = InMemoryDataStorage.getInstance();
+		this.setId(storage.getMessages().getNextId());
 		this.sender = sender;
 		this.receiver = receiver;
 		this.content = content;
 		this.attachments = attachments;
 		this.timestamp = System.currentTimeMillis();
+		this.deleted = false;
 	}
 	
-	public static long generateId() {
-		DataStorage storage = InMemoryDataStorage.getInstance();
-		return storage.getMessages().getNextId();		
+	public boolean getDeleted() {
+		return deleted;
+	}
+	
+	public void setDeleted() {
+		deleted = true;
 	}
 
 	public User getSender() {
