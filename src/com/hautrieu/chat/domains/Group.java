@@ -75,6 +75,7 @@ public class Group extends BaseEntity implements MessageReceivable  {
 		}
 		if (!userIsInGroup) {
 			members.add(user);
+			user.addGroup(this);
 			return true;
 		}
 

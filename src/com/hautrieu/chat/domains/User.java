@@ -8,6 +8,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class User extends BaseEntity implements MessageReceivable {
@@ -20,18 +22,22 @@ public class User extends BaseEntity implements MessageReceivable {
 	private String hashPassword;
 	private String gender;
 	private String dateOfBirth;
-	
+	private String alias;
+
+	private List<Group> userGroups;
+
 	public User(String username, String password) {
 		storage = InMemoryDataStorage.getInstance();
 		this.setId(storage.getUsers().getNextId());
 		this.username = username;
 		this.hashPassword = password;
+		this.userGroups = new ArrayList<>();
 	}
 	
 	public boolean login(String password) {
-        String hashedInputPassword = hash(password);
-        return this.getHashPassword().equals(hashedInputPassword);
-    }
+		String hashedInputPassword = hash(password);
+		return this.getHashPassword().equals(hashedInputPassword);
+	}
 
 	public String getLastName() {
 		return lastName;
@@ -85,7 +91,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	public String hash(String password) {
 		TextService textService = new TextService();
 		String hashed = textService.hashMD5(password);
-        return hashed;
+		return hashed;
 	}
 
 	public String getUsername() {
@@ -104,6 +110,43 @@ public class User extends BaseEntity implements MessageReceivable {
 	@Override
 	public long getReceiverId() {
 		return getId();
+	}
+
+	public static long generateId() {
+		DataStorage storage = InMemoryDataStorage.getInstance();
+		return storage.getUsers().getNextId();
+	}
+
+	public List<Group> getGroups() {
+		return userGroups;
+	}
+
+	public void addGroup(Group group) {
+		if (userIsInGroup(group) != -1) {
+			userGroups.add(group);
+		}
+	}
+
+	public void leaveGroup(Group group) {
+		if (userIsInGroup(group) != 1) {
+			for (int i = 0; i < userGroups.size(); i++) {
+				if (userGroups.get(i).getId() == group.getId()) {
+					userGroups.remove(i);
+				}
+			}
+		}
+	}
+
+// -1 if the user not here
+	public int userIsInGroup(Group group) {
+		List<User> groupMembers = group.getMembers();
+		int postition = -1;
+		for (int i = 0; i < group.getMembers().size(); i++) {
+			if (groupMembers.get(i).getId() == this.getId()) {
+				postition = i;
+			}
+		}
+		return postition;
 	}
 
 }
