@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -21,8 +22,8 @@ public class User extends BaseEntity implements MessageReceivable {
 	private String hashPassword;
 	private String gender;
 	private String dateOfBirth;
-	private String alias;
 
+	private HashMap<String, String> alias;
 	private List<Group> userGroups;
 
 	public User(String username, String password) {
@@ -30,6 +31,7 @@ public class User extends BaseEntity implements MessageReceivable {
 		this.username = username;
 		this.hashPassword = password;
 		this.userGroups = new ArrayList<>();
+		this.alias = new HashMap<>();
 	}
 
 	public User(long id, String lastName, String firstName, String hashPassword, String gender, String dob) {

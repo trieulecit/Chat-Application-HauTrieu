@@ -85,6 +85,7 @@ public class Group extends BaseEntity {
 		for (int i = 0; i < members.size(); i++) {
 			if (members.get(i).getId() == user.getId()) {
 				members.remove(i);
+				members.get(i).leaveGroup(this);
 			}
 		}
 	}
@@ -93,6 +94,7 @@ public class Group extends BaseEntity {
 		for (int i = 0; i < members.size(); i++) {
 			if (members.get(i).getId() == user.getId()) {
 				members.remove(i);
+				members.get(i).leaveGroup(this);
 			}
 		}
 	}

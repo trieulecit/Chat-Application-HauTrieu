@@ -47,14 +47,28 @@ class GroupServiceTest {
 
 	@Test
 	void testJoinGroup() {
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
 		groupService.createGroup("CSE 423", false);
 		assertTrue(groupService.joinGroup("CSE 423", testUser));
+		assertEquals(true, testUser.getGroups().size() > 0);
 	}
 
 	@Test
 	void testJoinPrivateGroup() {
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
 		groupService.createGroup("CSE 423", true);
 		assertFalse(groupService.joinGroup("CSE 423", testUser));
+		assertEquals(false, testUser.getGroups().size() > 0);
 	}
 
 	@Test
@@ -64,7 +78,6 @@ class GroupServiceTest {
 
 		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
 		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
-
 
 		groupService.createGroup("CSE 423", true);
 		testGroup = groupService.getGroup("CSE 423");
@@ -84,7 +97,6 @@ class GroupServiceTest {
 		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
 		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
 
-
 		groupService.createGroup("CSE 422", false);
 		groupService.joinGroup("CSE 422", testUser);
 		groupService.joinGroup("CSE 422", testAdmin);
@@ -102,7 +114,6 @@ class GroupServiceTest {
 
 		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
 		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
-
 
 		groupService.createGroup("CSE 422", true);
 		testGroup = groupService.getGroup("CSE 422");
