@@ -35,7 +35,7 @@ class InMemoryFileTest {
 		file = file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
 		System.out.println(file.getFullFileName());
 		assertEquals(1, storage.getFiles().getSize());
-		file.delete();
+		assertDoesNotThrow(() -> file.delete());
 	}
 	
 	@Test

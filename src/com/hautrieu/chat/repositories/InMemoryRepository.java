@@ -22,9 +22,8 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	}
 
 	@Override
-	public boolean add(T addingEntity) {
+	public void add(T addingEntity) {
 		dictionary.put(addingEntity.getId(), addingEntity);
-		return true;
 	}
 
 	@Override
@@ -34,6 +33,7 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 
 	@Override
 	public T getFirst(Predicate<T> predicate) {
+		
 		for(T value: dictionary.values()) {
 			if(predicate.test(value)) {
 				return value;
@@ -57,17 +57,18 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 
 	@Override
 	public long getNextId() {
-		return (int) dictionary.size() + 1;
+		return dictionary.size() + 1;
 	}
 
 	@Override
 	public T removeFirst(Predicate<T> predicate) {
+		
 		for(T value: dictionary.values()) {
 			if(predicate.test(value)) {
 				dictionary.remove(value.getId());
 				return value;
 			}
-		}
+		}		
 		return null;
 	}
 
