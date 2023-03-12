@@ -187,5 +187,4 @@ class GroupServiceTest {
 		assertEquals("Honey", userToChangeAlias.getUserAliasOrDefault(aliasChanger));
 		assertEquals("Ngoc Suong", userToChangeAlias.getUserAliasOrDefault(normalUserForTesting));
 	}
-
 }

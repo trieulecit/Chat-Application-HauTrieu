@@ -11,8 +11,8 @@ public class InMemoryFile extends BaseEntity {
 
 	private String extension;
 	
-	public InMemoryFile(String extension) {
-		this.extension = extension;
+	public InMemoryFile(String extensionAsInput) {
+		extension = extensionAsInput;
 	}
 	
 	public InMemoryFile upload(String extension, Path source) {
@@ -37,8 +37,7 @@ public class InMemoryFile extends BaseEntity {
         
 		} catch (IOException e) {
             e.printStackTrace();
-        }
-		
+        }		
 		return null;
 	}
 	
@@ -59,13 +58,12 @@ public class InMemoryFile extends BaseEntity {
 		File systemFile = getSystemFile();
 		
 		checkSystemFileExist(systemFile);
-
         checkNormalSystemFile(systemFile);
 
         if(systemFile.delete()) {
         	storage.getFiles().removeFirst(temporaryFile -> temporaryFile.getFullFileName() == getFullFileName());
         	return true;
-        }        
+        }
         return false;
 	}
 	
@@ -84,15 +82,15 @@ public class InMemoryFile extends BaseEntity {
 	}
 	
 	private File getSystemFile() {
-		return new File("src/files" + "/" + getFullFileName());
+		return new File("src/files/" + getFullFileName());
 	}
 
 	public String getExtension() {
 		return extension;
 	}
 
-	public void setExtension(String extension) {
-		this.extension = extension;
+	public void setExtension(String extensionAsInput) {
+		extension = extensionAsInput;
 	}
 	
 	public String getFullFileName() {

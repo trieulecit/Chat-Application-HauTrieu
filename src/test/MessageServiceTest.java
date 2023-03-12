@@ -151,6 +151,7 @@ public class MessageServiceTest {
 
 	@Test
 	void testGetMessagesByUser() {
+		
 		userService.addUser("trieu", "trieu");
 		groupService.createGroup("CSE422", false);
 		
@@ -199,5 +200,4 @@ public class MessageServiceTest {
 		
 		assertEquals(2, userRelatedMessages.size());
 	}
-
 }

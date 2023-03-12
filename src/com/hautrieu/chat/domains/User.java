@@ -20,14 +20,14 @@ public class User extends BaseEntity implements MessageReceivable {
 	private String gender;
 	private String dateOfBirth;
 
-	private HashMap<String, String> alias;
+	private HashMap<String, String> aliases;
 	private List<Group> userGroups;
 
-	public User(String username, String password) {
-		this.userName = username;
-		this.hashPassword = password;
-		this.userGroups = new ArrayList<>();
-		this.alias = new HashMap<>();
+	public User(String userNameAsInput, String passwordAsInput) {
+		userName = userNameAsInput;
+		hashPassword = passwordAsInput;
+		userGroups = new ArrayList<>();
+		aliases = new HashMap<>();
 	}
 
 	public boolean login(String password) {
@@ -81,10 +81,11 @@ public class User extends BaseEntity implements MessageReceivable {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
 		String dateString = dateFormat.format(date);
 
-		this.dateOfBirth = dateString;
+		dateOfBirth = dateString;
 	}
 
 	private String hash(String password) {		
+		
 		TextService textService = new TextService();
 		String hashed = textService.hashByMD5(password);
 		
@@ -95,13 +96,8 @@ public class User extends BaseEntity implements MessageReceivable {
 		return userName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	@Override
-	public String toString() {
-		return this.firstName;
+	public void setUserName(String userNameAsInput) {
+		userName = userNameAsInput;
 	}
 
 	@Override
@@ -114,18 +110,23 @@ public class User extends BaseEntity implements MessageReceivable {
 	}
 
 	public void addGroup(Group group) {
+		
 		if (getPositionInGroupOrDefault(group) != -1) {
 			userGroups.add(group);
 		}
 	}
 
 	public boolean leaveGroup(Group group) {
+		
 		if (getPositionInGroupOrDefault(group) != -1) {
 			return false;
 		}
 		
 		for (int index = 0; index < userGroups.size(); index++) {
-			if (userGroups.get(index).getId() == group.getId()) {
+			
+			Group currentGroup = userGroups.get(index);
+			
+			if (currentGroup.getId() == group.getId()) {
 				userGroups.remove(index);
 			}
 		}
@@ -133,6 +134,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	}
 
 	private int getPositionInGroupOrDefault(Group group) {
+		
 		List<User> groupMembers = group.getMembers();		
 		int postition = -1;
 		
@@ -147,15 +149,14 @@ public class User extends BaseEntity implements MessageReceivable {
 	}
 
 	public String getUserAliasOrDefault(User otherUser) {
-		String userAlias = getUserName();
 		
-		if (alias.containsKey(otherUser.getUserName())) {
-			userAlias = alias.get(otherUser.getUserName());
-		}
+		String userAlias = getUserName();
+		userAlias = aliases.getOrDefault(otherUser.getUserName(), getUserName());
+		
 		return userAlias;
 	}
 
 	public void addAlias(String assignorUserName, String assigneeCodeName) {
-		alias.put(assignorUserName, assigneeCodeName);
+		aliases.put(assignorUserName, assigneeCodeName);
 	}
 }

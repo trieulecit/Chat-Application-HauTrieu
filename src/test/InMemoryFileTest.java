@@ -28,7 +28,6 @@ class InMemoryFileTest {
 		fileInMemory = fileInMemory.upload("txt", fileInSystem.toPath());
 	}
 	
-	
 	@AfterEach
 	void clearThroughAllTestCases() {
 		for(InMemoryFile file: storage.getFiles().toList()) {
@@ -50,6 +49,4 @@ class InMemoryFileTest {
 	void testDelete() {
 		assertTrue(fileInMemory.delete());
 	}
-		
-
 }

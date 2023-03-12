@@ -56,8 +56,8 @@ public class Message extends BaseEntity {
 		return attachments;
 	}
 
-	public void setAttachments(List<InMemoryFile> attachments) {
-		this.attachments = attachments;
+	public void setAttachments(List<InMemoryFile> attachmentsAsInput) {
+		attachments = attachmentsAsInput;
 	}
 
 	public long getTimestamp() {

@@ -13,13 +13,13 @@ public class Group extends BaseEntity implements MessageReceivable  {
 
 	private boolean isPrivate;
 
-	public Group(String name, boolean isPrivate) {
+	public Group(String nameAsInput, boolean isPrivateAsInput) {
 		
 		members = new ArrayList<>();
 		messages = new ArrayList<>();
 
-		this.name = name;
-		this.isPrivate = isPrivate;
+		name = nameAsInput;
+		isPrivate = isPrivateAsInput;
 	}
 
 	public User getAdmin() {
@@ -30,28 +30,12 @@ public class Group extends BaseEntity implements MessageReceivable  {
 		return admin.getId() == user.getId();
 	}
 
-	public void setAdmin(User admin) {
+	public void setAdmin(User adminAsInput) {
 		
 		if (!isPrivate) {
 			return;
 		}
-		this.admin = admin;		
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<User> getMembers() {
-		return members;
-	}
-
-	public void setMembers(List<User> members) {
-		this.members = members;
+		admin = adminAsInput;		
 	}
 
 	public boolean addMember(User user) {
@@ -101,30 +85,46 @@ public class Group extends BaseEntity implements MessageReceivable  {
 		
 		return false;
 	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String nameAsInput) {
+		name = nameAsInput;
+	}
+
+	public List<User> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<User> membersAsInput) {
+		members = membersAsInput;
+	}
 
 	public List<Message> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
+	public void setMessages(List<Message> messagesAsInput) {
+		messages = messagesAsInput;
 	}
 
 	public void sendMessages(Message userMessage) {
-		this.messages.add(userMessage);
+		messages.add(userMessage);
 	}
 
 	public boolean isPrivate() {
 		return isPrivate;
 	}
 
-	public void setPrivate(boolean isPrivate, User creator) {
+	public void setPrivate(boolean isPrivateAsInput, User creator) {
 		
 		if (isPrivate == false) {
-			this.admin = null;
+			admin = null;
 		} else {
-			this.admin = creator;
-			this.isPrivate = isPrivate;
+			admin = creator;
+			isPrivate = isPrivateAsInput;
 		}		
 	}
 
