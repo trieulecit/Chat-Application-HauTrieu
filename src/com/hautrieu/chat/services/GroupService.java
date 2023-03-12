@@ -16,8 +16,9 @@ public class GroupService {
 	}
 
 	public boolean createGroup(String name, boolean isPrivate) {
+		
 		Group newGroup = new Group(name, isPrivate);
-		Group existing = getGroup(name);
+		Group existing = getGroupByName(name);
 
 		if (existing == null) {
 			storage.getGroups().add(newGroup);
@@ -27,7 +28,7 @@ public class GroupService {
 		return true;
 	}
 
-	public Group getGroup(String groupName) {
+	public Group getGroupByName(String groupName) {
 		Repository<Group> groups = storage.getGroups();
 		Group existing = groups.getFirst(group -> group.getName().equalsIgnoreCase(groupName));
 
@@ -56,8 +57,9 @@ public class GroupService {
 	}
 
 	public boolean joinGroup(String groupName, User user) {
+		
 		boolean joined = false;
-		Group existingGroup = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
+		Group existingGroup = getGroupByName(groupName);
 		
 		if (existingGroup != null && !existingGroup.isPrivate()) {
 			user.addGroup(existingGroup);
@@ -75,14 +77,18 @@ public class GroupService {
 
 	}
 
-	public void privateGroupAdminPromote(User creator, Group group) {
+	public void setCreatorAsAdminInPrivateGroup(User creator, Group group) {
 		if (group.isPrivate()) {
 			group.setAdmin(creator);
 		}
 	}
 
 	public boolean leaveGroup(User user, Group group) {
-		group.userLeave(user);
+		
+		if(!group.userLeave(user)) {
+			return false;
+		}
+		
 		return user.leaveGroup(group);
 	}
 
@@ -92,5 +98,13 @@ public class GroupService {
 	
 	public void setAliasForUser(User assignor, User assignee, String codename) {
 		assignee.addAlias(assignor.getUserName(), codename);
+	}
+	
+	public boolean compareCorrectGroupName(Group group, String comparator) {
+		
+		String name = group.getName();
+		boolean condition = name.equals(comparator);
+		
+		return condition;
 	}
 }

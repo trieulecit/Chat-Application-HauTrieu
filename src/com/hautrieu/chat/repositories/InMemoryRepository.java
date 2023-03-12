@@ -83,5 +83,15 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	public List<T> toList() {
 		return new ArrayList<>(dictionary.values());
 	}
-
+	
+	@Override
+	public boolean compareById(T firstEntity, T secondEntity) {
+		
+		long firstId = firstEntity.getId();
+		long secondId = secondEntity.getId();
+		
+		boolean condition = firstId == secondId;
+		
+		return condition;
+	}
 }

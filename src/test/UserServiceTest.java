@@ -4,25 +4,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
+
 import com.hautrieu.chat.domains.User;
 import com.hautrieu.chat.repositories.Repository;
+
 import com.hautrieu.chat.services.TextService;
 import com.hautrieu.chat.services.UserService;
 
 class UserServiceTest {
 	
-	User testUser;
-	UserService service;
-	DataStorage dataStorage;
-	TextService textService;
+	private UserService service;
+	private DataStorage dataStorage;
+	private TextService textService;
+	private UserService userService;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -32,6 +32,7 @@ class UserServiceTest {
 		dataStorage.getUsers().deleteAll();
 		service = new UserService(dataStorage);
 		textService = new TextService();
+		userService = new UserService(dataStorage);
 	}
 
 	@DisplayName("Sign up test")
@@ -44,9 +45,8 @@ class UserServiceTest {
 
 	@DisplayName("Log in test")
 	@Test
-	void testLogin() {
-		
-		service.addUser("hau", "admin");
+	void testLogin() {	
+		assertTrue(service.addUser("hau", "admin"));
 		assertTrue(service.login("hau", "admin"));
 	}
 
@@ -56,7 +56,7 @@ class UserServiceTest {
 		
 		String nonHash = "123456";
 		String expected = "e10adc3949ba59abbe56e057f20f883e";
-		String actual = textService.hashMD5(nonHash);
+		String actual = textService.hashByMD5(nonHash);
 		
 		assertEquals(expected, actual);
 	}
@@ -75,16 +75,15 @@ class UserServiceTest {
 		assertEquals(2, usersMatched.size());
 	}
 	
-	private User seedUser(String username, String password, Repository<User> users) {
+	private User seedUser(String userName, String password, Repository<User> users) {
 		
-		service.addUser(username, password);
+		service.addUser(userName, password);
 		
-		User user = users.getFirst(userItem -> userItem.getUserName().equals(username));
+		User user = users.getFirst(userItem -> userService.compareCorrectUserName(userItem, userName));
 		
 		user.setFirstName("Trieu");
 		user.setLastName("Le Hoang");
 		
 		return user;
 	}
-
 }

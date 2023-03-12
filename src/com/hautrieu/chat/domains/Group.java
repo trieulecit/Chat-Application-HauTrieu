@@ -85,17 +85,21 @@ public class Group extends BaseEntity implements MessageReceivable  {
 		}
 	}
 
-	public void userLeave(User user) {
+	public boolean userLeave(User user) {
 		
-		for (int index = 0; index < members.size(); index++) {
-			
+		for (int index = 0; index < members.size(); index++) {			
 			User member = members.get(index);
 			
 			if (member.getId() == user.getId()) {
+				
 				member.leaveGroup(this);
 				members.remove(index);
+				
+				return true;
 			}
 		}
+		
+		return false;
 	}
 
 	public List<Message> getMessages() {

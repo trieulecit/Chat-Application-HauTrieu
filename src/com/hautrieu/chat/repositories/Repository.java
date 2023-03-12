@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import com.hautrieu.chat.domains.BaseEntity;
 
 public interface Repository<T extends BaseEntity> {
+	
 	List<T> getAllMatching(Predicate<T> predicate);
 	
 	T getById(long id);
@@ -20,4 +21,5 @@ public interface Repository<T extends BaseEntity> {
     
     List<T> toList();
     
+    boolean compareById(T firstEntity, T secondEntity);
 }

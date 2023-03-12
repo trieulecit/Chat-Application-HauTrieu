@@ -8,14 +8,16 @@ import org.junit.jupiter.api.Test;
 import com.hautrieu.chat.services.TextService;
 
 class TextServiceTest {
-	TextService service = new TextService();
+	
+	private TextService service;
+	
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
+		service = new TextService();
 	}
 
 	@Test
-	void test() {
-		assertEquals("202cb962ac59075b964b07152d234b70", service.hashMD5("123"));
+	void testHashing() {
+		assertEquals("202cb962ac59075b964b07152d234b70", service.hashByMD5("123"));
 	}
-
 }

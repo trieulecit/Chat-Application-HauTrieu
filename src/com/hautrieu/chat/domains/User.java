@@ -86,7 +86,7 @@ public class User extends BaseEntity implements MessageReceivable {
 
 	private String hash(String password) {		
 		TextService textService = new TextService();
-		String hashed = textService.hashMD5(password);
+		String hashed = textService.hashByMD5(password);
 		
 		return hashed;
 	}
@@ -147,7 +147,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	}
 
 	public String getUserAliasOrDefault(User otherUser) {
-		String userAlias = this.getUserName();
+		String userAlias = getUserName();
 		
 		if (alias.containsKey(otherUser.getUserName())) {
 			userAlias = alias.get(otherUser.getUserName());
@@ -158,5 +158,4 @@ public class User extends BaseEntity implements MessageReceivable {
 	public void addAlias(String assignorUserName, String assigneeCodeName) {
 		alias.put(assignorUserName, assigneeCodeName);
 	}
-
 }

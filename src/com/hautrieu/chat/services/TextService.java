@@ -6,19 +6,21 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class TextService {
-	public String hashMD5(String input) {
+	
+	public String hashByMD5(String initial) {
 		
-		try {
+		try {			
 			
-			MessageDigest md = MessageDigest.getInstance("MD5");			
-			byte[] messageDigest = md.digest(input.getBytes());
+			MessageDigest getMD5Instance = MessageDigest.getInstance("MD5");			
+			byte[] messageDigest = getMD5Instance.digest(initial.getBytes());
 			BigInteger no = new BigInteger(1, messageDigest);
-			String hashtext = no.toString(16);
+			String hashText = no.toString(16);
 			
-			while (hashtext.length() < 32) {
-				hashtext = "0" + hashtext;
+			while (hashText.length() < 32) {
+				hashText = "0" + hashText;
 			}
-			return hashtext;
+			return hashText;
+			
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}

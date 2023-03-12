@@ -17,7 +17,7 @@ public class UserService {
 	public boolean login(String username, String password) {
 		User attemptedUser = findUserByUserName(username);
 		
-		if (!doesUsernameExist(username)) {
+		if (!checkUserNameExists(username)) {
 			return false;
 		}
 		return attemptedUser.login(password);
@@ -27,10 +27,10 @@ public class UserService {
 		
 		TextService service = new TextService();
 		
-		if (doesUsernameExist(username)) {
+		if (checkUserNameExists(username)) {
 			return false;
 		}	
-		User newUser = new User(username, service.hashMD5(password));
+		User newUser = new User(username, service.hashByMD5(password));
 		getUsersFromStorage().add(newUser);
 		
 		return true;
@@ -40,16 +40,41 @@ public class UserService {
 		return getUsersFromStorage().getAllMatching(user -> user.getFullName().equals(fullName));
 	}
 	
-	private User findUserByUserName(String username) {
-		return getUsersFromStorage().getFirst(user -> user.getUserName().equals(username));
+	private User findUserByUserName(String userName) {
+		return getUsersFromStorage().getFirst(user -> checkCorrectUserName(user, userName));
+	}
+	
+	private boolean checkCorrectUserName(User user, String comparator) {
+		
+		String userName = user.getUserName();		
+		return userName.equals(comparator);
 	}
 	
 	private Repository<User> getUsersFromStorage() {
 		return storage.getUsers();
 	}
 	
-	private boolean doesUsernameExist(String username) {
+	private boolean checkUserNameExists(String username) {
 		User existing = findUserByUserName(username);
 		return existing != null;
+	}
+	
+	public boolean compareTwoUsersById(User firstUser, User secondUser) {
+		
+		long firstId = firstUser.getId();
+		long secondId = secondUser.getId();
+		
+		boolean condition = firstId == secondId;
+		
+		return condition;
+	}
+	
+	public boolean compareCorrectUserName(User user, String comparator) {
+		
+		String userName = user.getUserName();
+		
+		boolean condition = userName.equalsIgnoreCase(comparator);
+		
+		return condition;
 	}
 }

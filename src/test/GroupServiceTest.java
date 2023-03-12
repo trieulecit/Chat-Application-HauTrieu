@@ -8,29 +8,23 @@ import org.junit.jupiter.api.Test;
 
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.data.InMemoryDataStorage;
+
 import com.hautrieu.chat.domains.Group;
 import com.hautrieu.chat.domains.User;
+
 import com.hautrieu.chat.services.GroupService;
-import com.hautrieu.chat.services.TextService;
 import com.hautrieu.chat.services.UserService;
 
 class GroupServiceTest {
-	User testUser;
-	User testUser2;
-	User testAdmin;
-	Group testGroup;
 
-	UserService userService;
-
-	DataStorage storage;
-	TextService textService;
-	GroupService groupService;
+	private DataStorage storage;
+	private UserService userService;	
+	private GroupService groupService;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		storage = InMemoryDataStorage.getInstance();
 		userService = new UserService(storage);
-		textService = new TextService();
 		groupService = new GroupService(storage);
 	}
 
@@ -43,88 +37,89 @@ class GroupServiceTest {
 	@Test
 	void testCreateGroup() {
 		groupService.createGroup("CSE 422", true);
-		assertNotNull(groupService.getGroup("CSE 422"));
+		assertNotNull(groupService.getGroupByName("CSE 422"));
 	}
 
 	@Test
 	void testJoinGroup() {
+		
+		groupService.createGroup("CSE 423", false);
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
-
-		groupService.createGroup("CSE 423", false);
-		assertTrue(groupService.joinGroup("CSE 423", testUser));
-		assertEquals(true, testUser.getGroups().size() > 0);
+		User userForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Hawk Fang"));
+		
+		
+		assertTrue(groupService.joinGroup("CSE 423", userForTesting));
+		assertEquals(1, userForTesting.getGroups().size());
 	}
 
 	@Test
 	void testJoinPrivateGroup() {
+		
+		groupService.createGroup("CSE 423", true);
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
-
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
-
-		groupService.createGroup("CSE 423", true);
-		assertFalse(groupService.joinGroup("CSE 423", testUser));
-		assertEquals(false, testUser.getGroups().size() > 0);
+		
+		User userForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Hawk Fang"));	
+		
+		assertFalse(groupService.joinGroup("CSE 423", userForTesting));
+		assertEquals(0, userForTesting.getGroups().size());
 	}
 
 	@Test
 	void testKick() {
+		
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
+		User adminForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Phuc Nguyen"));
+		User userForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Hawk Fang"));
 
 		groupService.createGroup("CSE 423", true);
-		testGroup = groupService.getGroup("CSE 423");
-		groupService.privateGroupAdminPromote(testAdmin, testGroup);
+		Group testGroup = groupService.getGroupByName("CSE 423");
+		groupService.setCreatorAsAdminInPrivateGroup(adminForTesting, testGroup);
 
-		groupService.addMember(testUser, testGroup);
+		groupService.addMember(userForTesting, testGroup);
 
-		assertTrue(groupService.kickMember(testAdmin, testUser, testGroup));
-
+		assertTrue(groupService.kickMember(adminForTesting, userForTesting, testGroup));
 	}
 
 	@Test
 	void testKickPublicGroup() {
+		
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
+		User adminForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Phuc Nguyen"));
+		User userForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Hawk Fang"));
 
 		groupService.createGroup("CSE 422", false);
-		groupService.joinGroup("CSE 422", testUser);
-		groupService.joinGroup("CSE 422", testAdmin);
+		groupService.joinGroup("CSE 422", userForTesting);
+		groupService.joinGroup("CSE 422", adminForTesting);
 
-		testGroup = groupService.getGroup("CSE 422");
+		Group groupForTesting = groupService.getGroupByName("CSE 422");
 
-		assertFalse(groupService.kickMember(testAdmin, testUser, testGroup));
-
+		assertFalse(groupService.kickMember(adminForTesting, userForTesting, groupForTesting));
 	}
 
 	@Test
 	void testPromoteNewAdmin() {
+		
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
+		User adminforTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Phuc Nguyen"));
+		User userForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Hawk Fang"));
 
 		groupService.createGroup("CSE 422", true);
-		testGroup = groupService.getGroup("CSE 422");
-		groupService.privateGroupAdminPromote(testAdmin, testGroup);
+		Group groupForTesting = groupService.getGroupByName("CSE 422");
+		groupService.setCreatorAsAdminInPrivateGroup(adminforTesting, groupForTesting);
 
-		// test user become admin
-		groupService.promoteAdmin(testAdmin, testUser, testGroup);
+		groupService.promoteAdmin(adminforTesting, userForTesting, groupForTesting);
 
-		assertTrue(groupService.kickMember(testUser, testAdmin, testGroup));
-		assertEquals(testUser.getId(), testGroup.getAdmin().getId());
+		assertTrue(groupService.kickMember(userForTesting, adminforTesting, groupForTesting));
+		assertEquals(userForTesting.getId(), groupForTesting.getAdmin().getId());
 	}
 
 	@Test
@@ -132,18 +127,17 @@ class GroupServiceTest {
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
+		User adminforTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Phuc Nguyen"));
+		User userForTesting = storage.getUsers().getFirst(user -> userService.compareCorrectUserName(user, "Hawk Fang"));
 
 		groupService.createGroup("CSE 422", false);
-		groupService.joinGroup("CSE 422", testAdmin);
-		groupService.joinGroup("CSE 422", testUser);
+		groupService.joinGroup("CSE 422", adminforTesting);
+		groupService.joinGroup("CSE 422", userForTesting);
 
-		testGroup = groupService.getGroup("CSE 422");
+		Group groupForTesting = groupService.getGroupByName("CSE 422");
 
-		assertTrue(groupService.leaveGroup(testUser, testGroup)
-);
-		assertEquals(1, testGroup.getMembers().size());
+		assertTrue(groupService.leaveGroup(userForTesting, groupForTesting));
+		assertEquals(1, groupForTesting.getMembers().size());
 	}
 
 	@Test
@@ -151,50 +145,47 @@ class GroupServiceTest {
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+		User adminForTesting = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
+		User userForTesting = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
 
 		groupService.createGroup("CSE 422", false);
 		groupService.createGroup("CSE 421", false);
 		groupService.createGroup("CSE 420", false);
 
-		groupService.joinGroup("CSE 422", testAdmin);
-		groupService.joinGroup("CSE 422", testUser);
-		groupService.joinGroup("CSE 421", testUser);
-		groupService.joinGroup("CSE 420", testUser);
+		groupService.joinGroup("CSE 422", adminForTesting);
+		groupService.joinGroup("CSE 422", userForTesting);
+		groupService.joinGroup("CSE 421", userForTesting);
+		groupService.joinGroup("CSE 420", userForTesting);
 
-		assertEquals(3, groupService.GetGroupsOfUser(testUser).size());
+		assertEquals(3, groupService.GetGroupsOfUser(userForTesting).size());
 
-		testGroup = groupService.getGroup("CSE 422");
+		Group groupForTesting = groupService.getGroupByName("CSE 422");
 
-		groupService.leaveGroup(testUser, testGroup);
+		groupService.leaveGroup(userForTesting, groupForTesting);
 
-		assertEquals(2, groupService.GetGroupsOfUser(testUser).size());
+		assertEquals(2, groupService.GetGroupsOfUser(userForTesting).size());
 	}
 
 	@Test
 	void testAlias() {
+		
+		groupService.createGroup("CSE 422", false);
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
 		userService.addUser("Ngoc Suong", "123");
 
-		testAdmin = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
-		testUser = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
-		testUser2 = storage.getUsers().getFirst(user -> user.getUserName().equals("Ngoc Suong"));
+		User normalUserForTesting = storage.getUsers().getFirst(user -> user.getUserName().equals("Phuc Nguyen"));
+		User aliasChanger = storage.getUsers().getFirst(user -> user.getUserName().equals("Hawk Fang"));
+		User userToChangeAlias = storage.getUsers().getFirst(user -> user.getUserName().equals("Ngoc Suong"));
+			
+		groupService.joinGroup("CSE 422", normalUserForTesting);
+		groupService.joinGroup("CSE 422", aliasChanger);
+		groupService.joinGroup("CSE 422", userToChangeAlias);
 
-		groupService.createGroup("CSE 422", false);
-		groupService.joinGroup("CSE 422", testAdmin);
-		groupService.joinGroup("CSE 422", testUser);
-		groupService.joinGroup("CSE 422", testUser2);
+		groupService.setAliasForUser(aliasChanger, userToChangeAlias, "Honey");
 
-		groupService.setAliasForUser(testUser, testUser2, "Honey");
-
-		testGroup = groupService.getGroup("CSE 422");
-
-		String result = testUser2.getUserAliasOrDefault(testUser);
-		String expected = "Honey";
-		assertEquals(expected, result);
-		assertEquals("Ngoc Suong", testUser2.getUserAliasOrDefault(testAdmin));
+		assertEquals("Honey", userToChangeAlias.getUserAliasOrDefault(aliasChanger));
+		assertEquals("Ngoc Suong", userToChangeAlias.getUserAliasOrDefault(normalUserForTesting));
 	}
 
 }
