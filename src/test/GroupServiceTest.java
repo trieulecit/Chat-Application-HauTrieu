@@ -146,6 +146,32 @@ class GroupServiceTest {
 	}
 
 	@Test
+	void testGetUserGroups() {
+		userService.addUser("Phuc Nguyen", "123");
+		userService.addUser("Hawk Fang", "123");
+
+		testAdmin = storage.getUsers().getFirst(user -> user.getUsername().equals("Phuc Nguyen"));
+		testUser = storage.getUsers().getFirst(user -> user.getUsername().equals("Hawk Fang"));
+
+		groupService.createGroup("CSE 422", false);
+		groupService.createGroup("CSE 421", false);
+		groupService.createGroup("CSE 420", false);
+
+		groupService.joinGroup("CSE 422", testAdmin);
+		groupService.joinGroup("CSE 422", testUser);
+		groupService.joinGroup("CSE 421", testUser);
+		groupService.joinGroup("CSE 420", testUser);
+
+		assertEquals(3, groupService.GetGroupsOfUser(testUser).size());
+
+		testGroup = groupService.getGroup("CSE 422");
+
+		groupService.leaveGroup(testUser, testGroup);
+
+		assertEquals(2, groupService.GetGroupsOfUser(testUser).size());
+	}
+
+	@Test
 	void testAlias() {
 		userService.addUser("Phuc Nguyen", "123");
 		userService.addUser("Hawk Fang", "123");
@@ -159,17 +185,15 @@ class GroupServiceTest {
 		groupService.joinGroup("CSE 422", testAdmin);
 		groupService.joinGroup("CSE 422", testUser);
 		groupService.joinGroup("CSE 422", testUser2);
-		
+
 		groupService.setAliasForUser(testUser, testUser2, "Honey");
-		
+
 		testGroup = groupService.getGroup("CSE 422");
-		
+
 		String result = testUser2.getUserAliasOrDefault(testUser);
 		String expected = "Honey";
 		assertEquals(expected, result);
 		assertEquals("Ngoc Suong", testUser2.getUserAliasOrDefault(testAdmin));
 	}
-	
-	
 
 }
