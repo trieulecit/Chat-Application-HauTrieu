@@ -1,7 +1,5 @@
 package com.hautrieu.chat.domains;
 
-import com.hautrieu.chat.data.DataStorage;
-import com.hautrieu.chat.data.InMemoryDataStorage;
 import com.hautrieu.chat.services.TextService;
 
 import java.text.DateFormat;
@@ -9,14 +7,13 @@ import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class User extends BaseEntity implements MessageReceivable {
 
-	private String username;
+	private String userName;
 	private String lastName;
 	private String firstName;
 	private String hashPassword;
@@ -27,7 +24,7 @@ public class User extends BaseEntity implements MessageReceivable {
 	private List<Group> userGroups;
 
 	public User(String username, String password) {
-		this.username = username;
+		this.userName = username;
 		this.hashPassword = password;
 		this.userGroups = new ArrayList<>();
 		this.alias = new HashMap<>();
@@ -87,18 +84,19 @@ public class User extends BaseEntity implements MessageReceivable {
 		this.dateOfBirth = dateString;
 	}
 
-	public String hash(String password) {
+	private String hash(String password) {		
 		TextService textService = new TextService();
 		String hashed = textService.hashMD5(password);
+		
 		return hashed;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	@Override
@@ -111,53 +109,54 @@ public class User extends BaseEntity implements MessageReceivable {
 		return getId();
 	}
 
-	public static long generateId() {
-		DataStorage storage = InMemoryDataStorage.getInstance();
-		return storage.getUsers().getNextId();
-	}
-
 	public List<Group> getGroups() {
 		return userGroups;
 	}
 
 	public void addGroup(Group group) {
-		if (userIsInGroup(group) != -1) {
+		if (getPositionInGroupOrDefault(group) != -1) {
 			userGroups.add(group);
 		}
 	}
 
-	public void leaveGroup(Group group) {
-		if (userIsInGroup(group) != 1) {
-			for (int i = 0; i < userGroups.size(); i++) {
-				if (userGroups.get(i).getId() == group.getId()) {
-					userGroups.remove(i);
-				}
+	public boolean leaveGroup(Group group) {
+		if (getPositionInGroupOrDefault(group) != -1) {
+			return false;
+		}
+		
+		for (int index = 0; index < userGroups.size(); index++) {
+			if (userGroups.get(index).getId() == group.getId()) {
+				userGroups.remove(index);
 			}
 		}
+		return true;
 	}
 
-// -1 if the user not here
-	public int userIsInGroup(Group group) {
-		List<User> groupMembers = group.getMembers();
+	private int getPositionInGroupOrDefault(Group group) {
+		List<User> groupMembers = group.getMembers();		
 		int postition = -1;
-		for (int i = 0; i < group.getMembers().size(); i++) {
-			if (groupMembers.get(i).getId() == getId()) {
-				postition = i;
+		
+		for (int index = 0; index < group.getMembers().size(); index++) {
+			User member = groupMembers.get(index);
+			
+			if (member.getId() == getId()) {
+				postition = index;
 			}
 		}
 		return postition;
 	}
 
 	public String getUserAliasOrDefault(User otherUser) {
-		String userAlias = this.getUsername();
-		if (alias.containsKey(otherUser.getUsername())) {
-			userAlias = alias.get(otherUser.getUsername());
+		String userAlias = this.getUserName();
+		
+		if (alias.containsKey(otherUser.getUserName())) {
+			userAlias = alias.get(otherUser.getUserName());
 		}
 		return userAlias;
 	}
 
-	public void addAlias(String assignorUsername, String assigneeCodename) {
-		alias.put(assignorUsername, assigneeCodename);
+	public void addAlias(String assignorUserName, String assigneeCodeName) {
+		alias.put(assignorUserName, assigneeCodeName);
 	}
 
 }

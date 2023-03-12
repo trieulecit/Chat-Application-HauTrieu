@@ -41,7 +41,7 @@ public class UserService {
 	}
 	
 	private User findUserByUserName(String username) {
-		return getUsersFromStorage().getFirst(user -> user.getUsername().equals(username));
+		return getUsersFromStorage().getFirst(user -> user.getUserName().equals(username));
 	}
 	
 	private Repository<User> getUsersFromStorage() {

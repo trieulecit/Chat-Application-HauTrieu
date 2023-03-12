@@ -2,9 +2,6 @@ package com.hautrieu.chat.domains;
 
 import java.util.List;
 
-import com.hautrieu.chat.data.DataStorage;
-import com.hautrieu.chat.data.InMemoryDataStorage;
-
 public class Message extends BaseEntity {
 
 	private User sender;
@@ -14,13 +11,13 @@ public class Message extends BaseEntity {
 	private long timestamp;	
 	private boolean deleted;
 
-	public Message(User senderAsInput, MessageReceivable receiverAsInput, String contentAsInput, List<InMemoryFile> attachments) {
-		this.sender = sender;
-		this.receiver = receiver;
-		this.content = content;
-		this.attachments = attachments;
-		this.timestamp = System.currentTimeMillis();
-		this.deleted = false;
+	public Message(User senderAsInput, MessageReceivable receiverAsInput, String contentAsInput, List<InMemoryFile> attachmentsAsInput) {
+		sender = senderAsInput;
+		receiver = receiverAsInput;
+		content = contentAsInput;
+		attachments = attachmentsAsInput;
+		timestamp = System.currentTimeMillis();
+		deleted = false;
 	}
 	
 	public boolean getDeleted() {

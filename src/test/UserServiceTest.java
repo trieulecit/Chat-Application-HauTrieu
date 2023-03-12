@@ -79,7 +79,7 @@ class UserServiceTest {
 		
 		service.addUser(username, password);
 		
-		User user = users.getFirst(userItem -> userItem.getUsername().equals(username));
+		User user = users.getFirst(userItem -> userItem.getUserName().equals(username));
 		
 		user.setFirstName("Trieu");
 		user.setLastName("Le Hoang");

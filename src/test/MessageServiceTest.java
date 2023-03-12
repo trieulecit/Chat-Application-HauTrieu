@@ -66,8 +66,8 @@ public class MessageServiceTest {
 	void testDeleteMessage() {
 		userService.addUser("trieu", "trieu");
 		userService.addUser("hau", "hau");
-		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
-		User receiver = storage.getUsers().getFirst(user -> user.getUsername().equals("hau"));
+		User sender = storage.getUsers().getFirst(user -> user.getUserName().equals("trieu"));
+		User receiver = storage.getUsers().getFirst(user -> user.getUserName().equals("hau"));
 		List<InMemoryFile> files = new ArrayList<>();
 		InMemoryFile file = new InMemoryFile("txt");
 		file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
@@ -82,7 +82,7 @@ public class MessageServiceTest {
 		userService.addUser("trieu", "trieu");
 		groupService.createGroup("CSE422", false);
 
-		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
+		User sender = storage.getUsers().getFirst(user -> user.getUserName().equals("trieu"));
 		Group receiver = storage.getGroups().getFirst(group -> group.getName().equals("CSE422"));
 		List<InMemoryFile> files = new ArrayList<>();
 		InMemoryFile file = new InMemoryFile("txt");
@@ -100,7 +100,7 @@ public class MessageServiceTest {
 		userService.addUser("trieu", "trieu");
 		groupService.createGroup("CSE422", false);
 
-		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
+		User sender = storage.getUsers().getFirst(user -> user.getUserName().equals("trieu"));
 		Group receiver = storage.getGroups().getFirst(group -> group.getName().equals("CSE422"));
 
 		for (int index = 1; index <= 100; index++) {
@@ -119,7 +119,7 @@ public class MessageServiceTest {
 		userService.addUser("trieu", "trieu");
 		groupService.createGroup("CSE422", false);
 
-		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
+		User sender = storage.getUsers().getFirst(user -> user.getUserName().equals("trieu"));
 		Group receiver = storage.getGroups().getFirst(group -> group.getName().equals("CSE422"));
 
 		messageService.send(sender, receiver, "Exercise 1:", null);
@@ -137,7 +137,7 @@ public class MessageServiceTest {
 		groupService.createGroup("CSE422", false);
 		
 
-		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
+		User sender = storage.getUsers().getFirst(user -> user.getUserName().equals("trieu"));
 		Group receiver = storage.getGroups().getFirst(group -> group.getName().equals("CSE422"));
 		
 		sender.addGroup(receiver);
@@ -158,7 +158,7 @@ public class MessageServiceTest {
 		groupService.createGroup("CSE3", false);
 		groupService.createGroup("CSE2", false);
 
-		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("hau"));
+		User sender = storage.getUsers().getFirst(user -> user.getUserName().equals("hau"));
 		groupService.joinGroup("CSE4", sender);
 		groupService.joinGroup("CSE3", sender);
 		groupService.joinGroup("CSE2", sender);

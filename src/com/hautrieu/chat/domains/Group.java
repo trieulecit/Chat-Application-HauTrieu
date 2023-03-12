@@ -3,9 +3,6 @@ package com.hautrieu.chat.domains;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hautrieu.chat.data.DataStorage;
-import com.hautrieu.chat.data.InMemoryDataStorage;
-
 public class Group extends BaseEntity implements MessageReceivable  {
 	
 	private User admin;

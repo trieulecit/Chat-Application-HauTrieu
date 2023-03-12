@@ -5,6 +5,7 @@ import java.util.List;
 import com.hautrieu.chat.data.DataStorage;
 import com.hautrieu.chat.domains.Group;
 import com.hautrieu.chat.domains.User;
+import com.hautrieu.chat.repositories.Repository;
 
 public class GroupService {
 
@@ -16,7 +17,7 @@ public class GroupService {
 
 	public boolean createGroup(String name, boolean isPrivate) {
 		Group newGroup = new Group(name, isPrivate);
-		Group existing = storage.getGroups().getFirst(group -> group.getName().equals(name));
+		Group existing = getGroup(name);
 
 		if (existing == null) {
 			storage.getGroups().add(newGroup);
@@ -27,7 +28,8 @@ public class GroupService {
 	}
 
 	public Group getGroup(String groupName) {
-		Group existing = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
+		Repository<Group> groups = storage.getGroups();
+		Group existing = groups.getFirst(group -> group.getName().equalsIgnoreCase(groupName));
 
 		return existing;
 	}
@@ -35,6 +37,7 @@ public class GroupService {
 	public boolean kickMember(User admin, User user, Group group) {
 
 		boolean kicked = false;
+		
 		if (!group.isPrivate()) {
 			return kicked;
 		}
@@ -55,6 +58,7 @@ public class GroupService {
 	public boolean joinGroup(String groupName, User user) {
 		boolean joined = false;
 		Group existingGroup = storage.getGroups().getFirst(group -> group.getName().equalsIgnoreCase(groupName));
+		
 		if (existingGroup != null && !existingGroup.isPrivate()) {
 			user.addGroup(existingGroup);
 			joined = existingGroup.addMember(user);
@@ -77,15 +81,16 @@ public class GroupService {
 		}
 	}
 
-	public void leaveGroup(User user, Group group) {
+	public boolean leaveGroup(User user, Group group) {
 		group.userLeave(user);
-		user.leaveGroup(group);
+		return user.leaveGroup(group);
 	}
 
 	public List<Group> GetGroupsOfUser(User user) {
 		return user.getGroups();
 	}
+	
 	public void setAliasForUser(User assignor, User assignee, String codename) {
-		assignee.addAlias(assignor.getUsername(), codename);
+		assignee.addAlias(assignor.getUserName(), codename);
 	}
 }
