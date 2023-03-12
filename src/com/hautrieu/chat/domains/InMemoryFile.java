@@ -16,6 +16,7 @@ public class InMemoryFile extends BaseEntity {
 	}
 	
 	public InMemoryFile upload(String extension, Path source) {
+		
 		DataStorage storage = InMemoryDataStorage.getInstance();
         InMemoryFile targetFile = new InMemoryFile(extension);
 
@@ -23,17 +24,15 @@ public class InMemoryFile extends BaseEntity {
 			
             File folder = new File("src/files");
             
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }          
+            createFileOrFolderIfNotExist(folder);
             
-            File file = new File(folder, targetFile.getFullFileName());
-            file.createNewFile();
+            File systemFile = new File(folder, targetFile.getFullFileName());
+            systemFile.createNewFile();
             
-            Files.copy(source, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(source, systemFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                       
             storage.getFiles().add(targetFile);
-            System.out.println("File uploaded successfully to: " + file.getAbsolutePath()); 
+            System.out.println("File uploaded successfully to: " + systemFile.getAbsolutePath()); 
             return targetFile;
         
 		} catch (IOException e) {
@@ -46,7 +45,7 @@ public class InMemoryFile extends BaseEntity {
 	public void open() {
 		try {
 			
-            File file = new File("src/files" + "/" + getFullFileName());
+            File file = getSystemFile();
             Path path = file.toPath();
             String absolutePath = path.toAbsolutePath().toString();
             Desktop.getDesktop().open(new File(absolutePath));
@@ -57,24 +56,35 @@ public class InMemoryFile extends BaseEntity {
 	
 	public boolean delete() {
 		DataStorage storage = InMemoryDataStorage.getInstance();
-		File file = new File("src/files" + "/" + getFullFileName());
+		File systemFile = getSystemFile();
 		
-		if (!file.exists()) {
-            System.out.println("File does not exist!");
-            return false;
-        }
+		checkSystemFileExist(systemFile);
 
-        if (!file.isFile()) {
-            System.out.println("Not a valid file!");
-            return false;
-        }
+        checkNormalSystemFile(systemFile);
 
-        if(file.delete()) {
+        if(systemFile.delete()) {
         	storage.getFiles().removeFirst(temporaryFile -> temporaryFile.getFullFileName() == getFullFileName());
         	return true;
-        }
-        
+        }        
         return false;
+	}
+	
+	private void createFileOrFolderIfNotExist(File target) {
+		if (!target.exists()) {
+            target.mkdirs();
+        }
+	}
+	
+	private boolean checkSystemFileExist(File file) {
+		return file.exists();
+	}
+	
+	private boolean checkNormalSystemFile(File file) {
+		return file.isFile();
+	}
+	
+	private File getSystemFile() {
+		return new File("src/files" + "/" + getFullFileName());
 	}
 
 	public String getExtension() {

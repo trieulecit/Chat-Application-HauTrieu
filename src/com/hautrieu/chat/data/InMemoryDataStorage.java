@@ -1,6 +1,7 @@
 package com.hautrieu.chat.data;
 
 public class InMemoryDataStorage extends DataStorage {
+	
 	private static InMemoryDataStorage storage;
 
     private InMemoryDataStorage() {

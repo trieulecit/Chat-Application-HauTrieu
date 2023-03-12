@@ -18,4 +18,6 @@ public interface Repository<T extends BaseEntity> {
     long getNextId();    
     long getSize();
     
+    List<T> toList();
+    
 }

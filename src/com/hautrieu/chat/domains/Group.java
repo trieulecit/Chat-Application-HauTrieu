@@ -29,20 +29,16 @@ public class Group extends BaseEntity implements MessageReceivable  {
 		return admin;
 	}
 
-	public boolean checkAdmin(User user) {
-		if (user.getId() == this.admin.getId()) {
-			return true;
-		} else {
-			return false;
-		}
+	public boolean checkAdmin(User user) {		
+		return admin.getId() == user.getId();
 	}
 
 	public void setAdmin(User admin) {
+		
 		if (!isPrivate) {
 			return;
-		} else {
-			this.admin = admin;
 		}
+		this.admin = admin;		
 	}
 
 	public String getName() {
@@ -65,20 +61,19 @@ public class Group extends BaseEntity implements MessageReceivable  {
 
 		boolean userIsInGroup = false;
 
-		for (User member : members) {
-			if (member.getId() == user.getId()) {
-				userIsInGroup = true;
+		for (User member : members) {			
+			if (member.getId() == user.getId()) {				
+				userIsInGroup = true;				
 				break;
 			}
 		}
+		
 		if (!userIsInGroup) {
 			members.add(user);
-			user.addGroup(this);
+			user.addGroup(this);			
 			return true;
 		}
-
 		return false;
-
 	}
 
 	public void kickMember(User user) {
@@ -94,10 +89,14 @@ public class Group extends BaseEntity implements MessageReceivable  {
 	}
 
 	public void userLeave(User user) {
-		for (int i = 0; i < members.size(); i++) {
-			if (members.get(i).getId() == user.getId()) {
-				members.get(i).leaveGroup(this);
-				members.remove(i);
+		
+		for (int index = 0; index < members.size(); index++) {
+			
+			User member = members.get(index);
+			
+			if (member.getId() == user.getId()) {
+				member.leaveGroup(this);
+				members.remove(index);
 			}
 		}
 	}

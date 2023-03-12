@@ -135,14 +135,18 @@ public class MessageServiceTest {
 	void testGetMessagesByUser() {
 		userService.addUser("trieu", "trieu");
 		groupService.createGroup("CSE422", false);
+		
 
 		User sender = storage.getUsers().getFirst(user -> user.getUsername().equals("trieu"));
 		Group receiver = storage.getGroups().getFirst(group -> group.getName().equals("CSE422"));
+		
+		sender.addGroup(receiver);
+		receiver.addMember(sender);
 
 		messageService.send(sender, receiver, "Exercise 1:", null);
 		messageService.send(sender, receiver, "Exercise 2:", null);
 
-		List<Message> messages = messageService.getRelateMessage(sender);
+		List<Message> messages = messageService.getRelatedMessage(sender);
 
 		assertEquals(2, messages.size());
 	}
@@ -165,12 +169,12 @@ public class MessageServiceTest {
 
 		messageService.send(sender, receiver, "Alo alo", null);
 		messageService.send(sender, receiver2, "8316", null);
-		messageService.send(sender, receiver3, "Hau viet cai nay luc 3h sang chu nhat, xong luc 3h36", null);
+		messageService.send(sender, receiver3, "Hau viet cai nay luc 3h sang chu nhat, xong luc 3h36 (Bớ người ra chơi game xuyên đêm)", null);
 
-		List<Message> userRelatedMessages = messageService.getRelateMessage(sender);
+		List<Message> userRelatedMessages = messageService.getRelatedMessage(sender);
 		assertEquals(3, userRelatedMessages.size());
 		groupService.leaveGroup(sender, receiver);
-		userRelatedMessages = messageService.getRelateMessage(sender);
+		userRelatedMessages = messageService.getRelatedMessage(sender);
 		assertEquals(2, userRelatedMessages.size());
 	}
 

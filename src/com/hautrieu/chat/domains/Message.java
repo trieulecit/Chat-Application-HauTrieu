@@ -14,7 +14,7 @@ public class Message extends BaseEntity {
 	private long timestamp;	
 	private boolean deleted;
 
-	public Message(User sender, MessageReceivable receiver, String content, List<InMemoryFile> attachments) {
+	public Message(User senderAsInput, MessageReceivable receiverAsInput, String contentAsInput, List<InMemoryFile> attachments) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.content = content;
@@ -44,15 +44,15 @@ public class Message extends BaseEntity {
 	}
 
 	public void setContent(String message) {
-		this.content = message;
+		content = message;
 	}
 
 	public MessageReceivable getReceiver() {
 		return receiver;
 	}
 
-	public void setReceiver(MessageReceivable receiver) {
-		this.receiver = receiver;
+	public void setReceiver(MessageReceivable receiverAsInput) {
+		receiver = receiverAsInput;
 	}
 
 	public List<InMemoryFile> getAttachments() {

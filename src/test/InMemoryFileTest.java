@@ -2,11 +2,14 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,32 +25,38 @@ class InMemoryFileTest {
 	@BeforeEach
 	void setUp() {
 		storage = InMemoryDataStorage.getInstance();
+		storage.getFiles().deleteAll();
 		file = new InMemoryFile(null);
 	}
 	
+	
 	@AfterEach
-	void clearAll() {
-		storage.getFiles().deleteAll();
+	void clearThroughAllTestCases() {
+		for(InMemoryFile file: storage.getFiles().toList()) {
+			file.delete();
+		}
 	}
 	
 	@Test
 	void testUpload() {
-		file = file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
+		File ioFile = new File("src/test/files/UploadText.txt");
+		file = file.upload("txt", ioFile.toPath());
 		System.out.println(file.getFullFileName());
 		assertEquals(1, storage.getFiles().getSize());
-		file.delete();
+		
 	}
 	
 	@Test
 	void testOpen() {
-		file = file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
+		File ioFile = new File("src/test/files/UploadText.txt");
+		file = file.upload("txt", ioFile.toPath());
 		assertDoesNotThrow(() -> file.open());
-		file.delete();
 	}
 	
 	@Test
 	void testDelete() {
-		file = file.upload("txt", Paths.get("C:\\Users\\Dell\\Desktop\\UploadText.txt"));
+		File ioFile = new File("src/test/files/UploadText.txt");
+		file = file.upload("txt", ioFile.toPath());
 		assertTrue(file.delete());
 	}
 		

@@ -82,7 +82,7 @@ public class MessageService {
 		return outputMessages;
 	}
 
-	public List<Message> getRelateMessage(User user) {
+	public List<Message> getRelatedMessage(User user) {
 		List<Message> relatedMessage = new ArrayList<>();
 
 		for (Group userGroup : user.getGroups()) {

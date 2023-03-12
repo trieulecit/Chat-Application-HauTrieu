@@ -23,7 +23,7 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 
 	@Override
 	public void add(T addingEntity) {
-		long id = getNextId();
+		long id = dictionary.size() == 0 ? 0 : getNextId();
 		addingEntity.setId(id);
 		dictionary.put(id, addingEntity);
 	}
@@ -77,6 +77,11 @@ public class InMemoryRepository<T extends BaseEntity> implements Repository<T> {
 	@Override
 	public long getSize() {
 		return dictionary.size();
+	}
+
+	@Override
+	public List<T> toList() {
+		return new ArrayList<>(dictionary.values());
 	}
 
 }

@@ -9,6 +9,7 @@ import com.hautrieu.chat.repositories.InMemoryRepository;
 import com.hautrieu.chat.repositories.Repository;
 
 public abstract class DataStorage {
+	
 	private Repository<User> users;
 	private Repository<Group> groups;
 	private Repository<Message> messages;

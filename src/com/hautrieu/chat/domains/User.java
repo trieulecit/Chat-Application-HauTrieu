@@ -141,7 +141,7 @@ public class User extends BaseEntity implements MessageReceivable {
 		List<User> groupMembers = group.getMembers();
 		int postition = -1;
 		for (int i = 0; i < group.getMembers().size(); i++) {
-			if (groupMembers.get(i).getId() == this.getId()) {
+			if (groupMembers.get(i).getId() == getId()) {
 				postition = i;
 			}
 		}
